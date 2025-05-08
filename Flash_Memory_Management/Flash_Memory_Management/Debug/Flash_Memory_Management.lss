@@ -15,23 +15,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000150  00000000  00000000  000027ad  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000029ed  00000000  00000000  000028fd  2**0
+  6 .debug_info   00002a2b  00000000  00000000  000028fd  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000010a2  00000000  00000000  000052ea  2**0
+  7 .debug_abbrev 000010a2  00000000  00000000  00005328  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000116b  00000000  00000000  0000638c  2**0
+  8 .debug_line   0000116b  00000000  00000000  000063ca  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000300  00000000  00000000  000074f8  2**2
+  9 .debug_frame  00000300  00000000  00000000  00007538  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004a7  00000000  00000000  000077f8  2**0
+ 10 .debug_str    000004a7  00000000  00000000  00007838  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000c57  00000000  00000000  00007c9f  2**0
+ 11 .debug_loc    00000c57  00000000  00000000  00007cdf  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000140  00000000  00000000  000088f6  2**0
+ 12 .debug_ranges 00000140  00000000  00000000  00008936  2**0
                   CONTENTS, READONLY, DEBUGGING
  13 .text         00000004  0000266c  0000266c  00002700  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
- 14 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00008a38  2**2
+ 14 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00008a78  2**2
                   CONTENTS, READONLY, DEBUGGING
  15 .progmemx.data 00000011  0000033c  0000033c  000003d0  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, PROGMEMX
@@ -615,8 +615,8 @@ void UserInput() //asking for user input
     1e02:	1c c0       	rjmp	.+56     	; 0x1e3c <UserInput+0x4c>
 	{
 		CommandBuffer[arr_address] = c; //adding character into array at index, creating a string
-    1e04:	20 91 2a 04 	lds	r18, 0x042A	; 0x80042a <_end>
-    1e08:	30 91 2b 04 	lds	r19, 0x042B	; 0x80042b <_end+0x1>
+    1e04:	20 91 2a 04 	lds	r18, 0x042A	; 0x80042a <arr_address>
+    1e08:	30 91 2b 04 	lds	r19, 0x042B	; 0x80042b <arr_address+0x1>
     1e0c:	f9 01       	movw	r30, r18
     1e0e:	e0 50       	subi	r30, 0x00	; 0
     1e10:	fe 4f       	sbci	r31, 0xFE	; 254
@@ -627,15 +627,15 @@ void UserInput() //asking for user input
     1e18:	20 f0       	brcs	.+8      	; 0x1e22 <UserInput+0x32>
 		{
 			arr_address = 0; //resets array at address 0
-    1e1a:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <_end+0x1>
-    1e1e:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <_end>
+    1e1a:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <arr_address+0x1>
+    1e1e:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <arr_address>
 		}
 		arr_address++;
-    1e22:	80 91 2a 04 	lds	r24, 0x042A	; 0x80042a <_end>
-    1e26:	90 91 2b 04 	lds	r25, 0x042B	; 0x80042b <_end+0x1>
+    1e22:	80 91 2a 04 	lds	r24, 0x042A	; 0x80042a <arr_address>
+    1e26:	90 91 2b 04 	lds	r25, 0x042B	; 0x80042b <arr_address+0x1>
     1e2a:	01 96       	adiw	r24, 0x01	; 1
-    1e2c:	90 93 2b 04 	sts	0x042B, r25	; 0x80042b <_end+0x1>
-    1e30:	80 93 2a 04 	sts	0x042A, r24	; 0x80042a <_end>
+    1e2c:	90 93 2b 04 	sts	0x042B, r25	; 0x80042b <arr_address+0x1>
+    1e30:	80 93 2a 04 	sts	0x042A, r24	; 0x80042a <arr_address>
 		c = USART_RX_Data(); //receive user char data type input
     1e34:	0e 94 17 13 	call	0x262e	; 0x262e <USART_RX_Data>
     1e38:	80 93 1c 03 	sts	0x031C, r24	; 0x80031c <c>
@@ -654,14 +654,14 @@ void UserInput() //asking for user input
 		c = USART_RX_Data(); //receive user char data type input
 	}
 	CommandBuffer[arr_address] = '\r'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
-    1e44:	e0 91 2a 04 	lds	r30, 0x042A	; 0x80042a <_end>
-    1e48:	f0 91 2b 04 	lds	r31, 0x042B	; 0x80042b <_end+0x1>
+    1e44:	e0 91 2a 04 	lds	r30, 0x042A	; 0x80042a <arr_address>
+    1e48:	f0 91 2b 04 	lds	r31, 0x042B	; 0x80042b <arr_address+0x1>
     1e4c:	e0 50       	subi	r30, 0x00	; 0
     1e4e:	fe 4f       	sbci	r31, 0xFE	; 254
     1e50:	80 83       	st	Z, r24
 	arr_address = 0; //resets array at address 0
-    1e52:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <_end+0x1>
-    1e56:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <_end>
+    1e52:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <arr_address+0x1>
+    1e56:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <arr_address>
     1e5a:	08 95       	ret
 
 Disassembly of section .text.ExecuteCommand:
@@ -935,8 +935,8 @@ void CommandLine()
     1ab8:	1c c0       	rjmp	.+56     	; 0x1af2 <CommandLine+0x52>
 	{
 		CommandBuffer[arr_address] = c; //adding character into array at index, creating a string
-    1aba:	20 91 2a 04 	lds	r18, 0x042A	; 0x80042a <_end>
-    1abe:	30 91 2b 04 	lds	r19, 0x042B	; 0x80042b <_end+0x1>
+    1aba:	20 91 2a 04 	lds	r18, 0x042A	; 0x80042a <arr_address>
+    1abe:	30 91 2b 04 	lds	r19, 0x042B	; 0x80042b <arr_address+0x1>
     1ac2:	f9 01       	movw	r30, r18
     1ac4:	e0 50       	subi	r30, 0x00	; 0
     1ac6:	fe 4f       	sbci	r31, 0xFE	; 254
@@ -947,15 +947,15 @@ void CommandLine()
     1ace:	20 f0       	brcs	.+8      	; 0x1ad8 <CommandLine+0x38>
 		{
 			arr_address = 0; //resets array at address 0
-    1ad0:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <_end+0x1>
-    1ad4:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <_end>
+    1ad0:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <arr_address+0x1>
+    1ad4:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <arr_address>
 		}
 		arr_address++;
-    1ad8:	80 91 2a 04 	lds	r24, 0x042A	; 0x80042a <_end>
-    1adc:	90 91 2b 04 	lds	r25, 0x042B	; 0x80042b <_end+0x1>
+    1ad8:	80 91 2a 04 	lds	r24, 0x042A	; 0x80042a <arr_address>
+    1adc:	90 91 2b 04 	lds	r25, 0x042B	; 0x80042b <arr_address+0x1>
     1ae0:	01 96       	adiw	r24, 0x01	; 1
-    1ae2:	90 93 2b 04 	sts	0x042B, r25	; 0x80042b <_end+0x1>
-    1ae6:	80 93 2a 04 	sts	0x042A, r24	; 0x80042a <_end>
+    1ae2:	90 93 2b 04 	sts	0x042B, r25	; 0x80042b <arr_address+0x1>
+    1ae6:	80 93 2a 04 	sts	0x042A, r24	; 0x80042a <arr_address>
 		c = USART_RX_Data(); //receive user char data type input
     1aea:	0e 94 17 13 	call	0x262e	; 0x262e <USART_RX_Data>
     1aee:	80 93 1c 03 	sts	0x031C, r24	; 0x80031c <c>
@@ -976,14 +976,14 @@ void CommandLine()
 		c = USART_RX_Data(); //receive user char data type input
 	}
 	CommandBuffer[arr_address] = '\0'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
-    1afe:	e0 91 2a 04 	lds	r30, 0x042A	; 0x80042a <_end>
-    1b02:	f0 91 2b 04 	lds	r31, 0x042B	; 0x80042b <_end+0x1>
+    1afe:	e0 91 2a 04 	lds	r30, 0x042A	; 0x80042a <arr_address>
+    1b02:	f0 91 2b 04 	lds	r31, 0x042B	; 0x80042b <arr_address+0x1>
     1b06:	e0 50       	subi	r30, 0x00	; 0
     1b08:	fe 4f       	sbci	r31, 0xFE	; 254
     1b0a:	10 82       	st	Z, r1
 	arr_address = 0; //resets array at address 0
-    1b0c:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <_end+0x1>
-    1b10:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <_end>
+    1b0c:	10 92 2b 04 	sts	0x042B, r1	; 0x80042b <arr_address+0x1>
+    1b10:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <arr_address>
 	
 	USART_Data(CommandBuffer);
     1b14:	80 e0       	ldi	r24, 0x00	; 0

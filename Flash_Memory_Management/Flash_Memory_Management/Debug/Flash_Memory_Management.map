@@ -788,13 +788,13 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x29ed
+.debug_info     0x0000000000000000     0x2a2b
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0xbbc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/xc8/avr/lib/avr6/memx-const/crtatmega2560.o
- .debug_info    0x0000000000000bbc      0x4ec main.o
- .debug_info    0x00000000000010a8      0x472 src/Board_V2_2.o
- .debug_info    0x000000000000151a      0x4ce src/Command_Line_Functions.o
- .debug_info    0x00000000000019e8     0x1005 src/FLASH_NAND_MEMORY.o
+ .debug_info    0x0000000000000bbc      0x50b main.o
+ .debug_info    0x00000000000010c7      0x472 src/Board_V2_2.o
+ .debug_info    0x0000000000001539      0x4ed src/Command_Line_Functions.o
+ .debug_info    0x0000000000001a26     0x1005 src/FLASH_NAND_MEMORY.o
 
 .debug_abbrev   0x0000000000000000     0x10a2
  *(.debug_abbrev)
