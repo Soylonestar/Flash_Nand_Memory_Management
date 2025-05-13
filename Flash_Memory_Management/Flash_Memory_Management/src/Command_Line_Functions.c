@@ -2,10 +2,9 @@
  * Command_Line_Functions.c
  *
  * Created: 8/6/2024 12:18:52 PM
- *  Author: agarciasampedroperez
+ * Author: agarciasampedroperez
+ * Description: This is where all the command from user go to execute corresponding commands
  */ 
-
-//testing this crap
 
 #include "../include/Atmega_2560_Definitions_Includes.h"
 #include "../include/Command_Line_Functions.h"
@@ -32,7 +31,7 @@ void CommandLine()
 	CommandBuffer[arr_address] = '\0'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
 	arr_address = 0; //resets array at address 0
 	
-	USART_Data(CommandBuffer);
+	USART_Data(CommandBuffer); //shows what the user wrote on terminal
 	USART_TX_Data('\n');
 		
 	ExecuteCommand(CommandBuffer); //puts CommandLine into Execute Function...

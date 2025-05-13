@@ -3,6 +3,7 @@
  *
  * Created: 8/6/2024 12:21:22 PM
  *  Author: agarciasampedroperez
+ * Description: This is for our V2.2 board function
  */ 
 
 #include "../include/Atmega_2560_Definitions_Includes.h"

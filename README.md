@@ -270,3 +270,10 @@ So currently I'm using the Board 000 of the V2.2 with its Flash Nand. Although w
 According to the Flash ID function, it's id is "Micron ID (0x2C) Device ID (0x24)". Which means the following: <br/>
 <img src = "https://github.com/user-attachments/assets/3881eccf-e46e-43bf-94cb-deaa6589ad49" width = "600" /> <br/>
 But at the moment everything works and I'm very happy with it. Now I'm going to work on making sure the Memory Erase function works instead of having to reset the device all together. <br/>
+
+5/13/2025 <br/>
+Going back to understand what I wrote for this Flash NAND Driver. <br/>
+At the moment, everything works, currently with the 000 board. V2.2. I even commented out all the delays to make the process a little bit quicker.
+Everything works just fine, but currently trying to determine why the status registers reads 0x08 which complies with Program_Fail (P_Fail). But everythign works...so what could be triggering this...<br/>
+I also just read my last log, I will look into the Memory Erase Function later.<br/>
+Also just for manangement reason, I got git bash to work with my local laptop and my working computer, so I should be able to work on this anywhere. Able to commit and pull if new contents. <br/>
