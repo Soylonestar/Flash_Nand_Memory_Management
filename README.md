@@ -277,3 +277,8 @@ At the moment, everything works, currently with the 000 board. V2.2. I even comm
 Everything works just fine, but currently trying to determine why the status registers reads 0x08 which complies with Program_Fail (P_Fail). But everythign works...so what could be triggering this...<br/>
 I also just read my last log, I will look into the Memory Erase Function later.<br/>
 Also just for manangement reason, I got git bash to work with my local laptop and my working computer, so I should be able to work on this anywhere. Able to commit and pull if new contents. <br/>
+
+5/14/2025 <br/>
+Going bit by bit to fully understand where I'm writing data, as that could very well be the reason as to why I'm not erasing data...<br/>
+Turns out, my original function I had called Flash_Cache_Address is not a Cache Address but a Column Address, for memory....dumb fuck<br/>
+I have almost a full grasp on how this memory stuff is allocated and divided in the Flash NAND... which is awesome. <br/>

@@ -98,7 +98,7 @@ void ExecuteCommand(const char *str) //Execute Command Line function
 	}
 	else if (strcmp(str, "Parameter Page") == 0) //Basic Read Test Command
 	{
-		s = 1; //sets main array address to the correct place
+		s = 2; //sets main array address to the correct place
 		CLEAR_ARR();
 		FLASH_Para_Pg();
 		

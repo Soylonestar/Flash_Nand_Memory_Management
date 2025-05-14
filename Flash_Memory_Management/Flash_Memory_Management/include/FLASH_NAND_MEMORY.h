@@ -34,7 +34,7 @@ void CLEAR_ARR();//clears Arrays
 void FLASH_Status(); //checks status till the data completes transferring
 
 void FLASH_MainArray_Address(int s); //determines what 24-bit address we write/read from (starting address dependent)
-void FLASH_Cache_Address(int s); //determines what 16-bit address (12-bits actually) we write/read from (plane bit dependent)
+void FLASH_Column_Address(int s); //determines what 16-bit address (12-bits actually) we write/read from (plane bit dependent)
 
 void FLASH_Data_Storage(int s); //determines how to store FLASH NAND data in an array (Parameter page dependent)
 
