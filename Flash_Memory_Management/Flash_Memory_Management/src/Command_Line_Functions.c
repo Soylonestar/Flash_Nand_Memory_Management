@@ -105,7 +105,7 @@ void ExecuteCommand(const char *str) //Execute Command Line function
 		//reading data from Data array
 		for (int i = 0; i < sizeof(data); i++) //address is incremented automatically after each byte is shifted out
 		{
-			sprintf(status_feature, "Data Received: (0x%02X) \n", data[i]); //hex data to string
+			sprintf(status_feature, "%i->Data Received: (0x%02X) \n", i, data[i]); //hex data to string
 			USART_Data(status_feature);
 		}	
 	}

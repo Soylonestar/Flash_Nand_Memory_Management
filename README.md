@@ -282,3 +282,6 @@ Also just for manangement reason, I got git bash to work with my local laptop an
 Going bit by bit to fully understand where I'm writing data, as that could very well be the reason as to why I'm not erasing data...<br/>
 Turns out, my original function I had called Flash_Cache_Address is not a Cache Address but a Column Address, for memory....dumb fuck<br/>
 I have almost a full grasp on how this memory stuff is allocated and divided in the Flash NAND... which is awesome. <br/>
+
+5/15/25 <br/>
+Continuing on yesterdays ideas. <br/>
