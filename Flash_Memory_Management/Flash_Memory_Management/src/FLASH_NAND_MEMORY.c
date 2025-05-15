@@ -111,6 +111,8 @@ void FLASH_Write_Disable(void) //de-select Slave device and disable Write operat
 
 void FLASH_Write_Data() //const char *str) //writes String data via the addressed individual characters into Flash_NAND (SPI protocol)
 {
+	//FLASH_Erase(); //apparently I need to do a block erase of the block I'm writing to...
+	
 	FLASH_Write_Enable();
 	
 	//code below sends Program_Load command with the starting address of the cache register
@@ -146,6 +148,8 @@ void FLASH_Write_Data() //const char *str) //writes String data via the addresse
 
 	//sprintf(status_feature, "Program Load: Status (0x%02X) High-Byte (0x%02X) Low-Byte (0x%02X) \n", HEX_ID[0], HEX_ID[1], HEX_ID[2]); //hex data to string
 	USART_Data("Program Load \n");
+	
+	FLASH_Status(); //the timing doesn't show but I want to try...
 	
 	//_delay_us(5); //change delay if it doesn't work....
 
@@ -348,7 +352,7 @@ void FLASH_Para_Pg() //reads from the FLASH NAND parameter page
 	//_delay_us(5); //change delay if it doesn't work....
 }
 
-void FLASH_MainArray_Address(int s) //24-bit address 4,2Gbs (7 dummy bits, 17 bits block/page)
+void FLASH_MainArray_Address(int s) //24-bit address 4,2Gbs (7 dummy bits, [16:6] Blocks / [5:0] Pages)
 {
 	if (s == 0) //normal memory operation
 	{
@@ -356,11 +360,11 @@ void FLASH_MainArray_Address(int s) //24-bit address 4,2Gbs (7 dummy bits, 17 bi
 		while (!(SPSR & (1 << SPIF)));
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 				
-		SPDR = 0x00; //the mid-byte of the 24-bit address
+		SPDR = 0x01; //the mid-byte of the 24-bit address (block 5, page 0)
 		while (!(SPSR & (1 << SPIF)));
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 		
-		SPDR = 0x00; //the low-byte of the 24-bit address; block/page address is 0x00
+		SPDR = 0x40; //the low-byte of the 24-bit address; block/page address is 0x00
 		while (!(SPSR & (1 << SPIF)));
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	}
@@ -456,8 +460,7 @@ void FLASH_Status() //this makes sure that data finishes transferring
 	
 	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
 	
-	//sprintf(status_feature, "Get Features: Status (0x%02X) Status Register (0x%02X) Status Cleared (0x%02X) \n", HEX_ID[0], HEX_ID[1], HEX_ID[2]); //hex data to string
-	sprintf(status_feature, "Get Features: Status Cleared (0x%02X), (0x%02X)\n", HEX_ID[0], HEX_ID[1]); //hex data to string
+	sprintf(status_feature, "Get Features: Status (0x%02X), (0x%02X)\n", HEX_ID[0], HEX_ID[1]); //hex data to string
 	USART_Data(status_feature);
 	
 	//_delay_us(5); //change delay if it doesn't work....

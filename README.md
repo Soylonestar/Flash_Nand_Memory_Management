@@ -285,3 +285,7 @@ I have almost a full grasp on how this memory stuff is allocated and divided in 
 
 5/15/25 <br/>
 Continuing on yesterdays ideas. <br/>
+Starting to work around the idea of using the Erase Block thing. <br/>
+I really truly didn't understand NAND till now, basically in order to write into the Flash, I need to erase (reset to 1) the block I want to write to, then program it (change specific bits to 0). Which is interesting. This could very well be the reason why P_Fail occurs. <br/>
+I'm starting to show different status stuff, so something is happening. <br/>
+But, erasing still doesn't work and writing correctly into block also doesn't work right now. But progress is progress. <br/>

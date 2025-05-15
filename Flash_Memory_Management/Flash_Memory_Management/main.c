@@ -32,7 +32,7 @@ int main(void)
     while(1)
     {		
 		CLEAR_ARR();
-		USART_Data("Arrays Cleared \n");
+		USART_Data("->Arrays Cleared \n");
 		
 		CommandLine(); //asking for user command line
 		

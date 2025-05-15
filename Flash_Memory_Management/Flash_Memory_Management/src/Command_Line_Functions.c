@@ -15,7 +15,7 @@ int arr_address = 0; //for CommandBuffer array
 
 void CommandLine()
 {	
-	USART_Data("User Input:\n"); //asking for User Input
+	USART_Data("->User Input:\n"); //asking for User Input
 	
 	c = USART_RX_Data(); //receive user char data type input
 	while ((c != '\r') && (c!= '\n'))
