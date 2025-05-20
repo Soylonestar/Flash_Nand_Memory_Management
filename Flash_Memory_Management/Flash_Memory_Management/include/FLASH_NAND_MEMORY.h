@@ -11,7 +11,7 @@
 
 char data[254]; //actual data from FLASH_Nand Memory
 char status_feature[30];
-char HEX_ID[10];
+uint8_t HEX_ID[10]; //unsigned 8-bits
 int s;
 
 void SPI_MASTER_Init(); //initializes Serial Peripheral Interference (SPI) operations in Master Mode
@@ -19,12 +19,12 @@ void SPI_MASTER_Init(); //initializes Serial Peripheral Interference (SPI) opera
 void FLASH_Write_Enable(); //select Slave device and initializes Write operations onto Flash NAND
 void FLASH_Write_Disable(); //de-select Slave device and disable Write operations onto Flash NAND
 
-void FLASH_Write_Data();//const char *str); //writes String data via the addressed individual characters into Flash_NAND (SPI protocol)
+void FLASH_Page_Program(); //Write into addressed pages in Flash NAND
 void FLASH_Transfer_Cache(void); //new command to transfer data from cache to main array
 void FLASH_Transfer_MainArray(); //new command to transfer data from main array to cache
 void FLASH_Read(); //reads data from FLASH_NAND Memory chip (SPI protocol)
 
-void FLASH_Erase(); //erases data from Flash Nand Memory at the block level
+void FLASH_Block_Erase(); //erases data from Flash NAND Memory at the block level
 void FLASH_ID(); //read device ID
 void FLASH_Reset(); //reset memory device
 
@@ -33,7 +33,7 @@ void FLASH_Para_Pg(); //reads from the FLASH NAND parameter page
 void CLEAR_ARR();//clears Arrays
 void FLASH_Status(); //checks status till the data completes transferring
 
-void FLASH_MainArray_Address(int s); //determines what 24-bit address (17-bits [block/page], rest is dummy bits) we write/read from (starting address dependent)
+void FLASH_MainArray_Address(int s); //determines what 24-bit address (17-bits [block/page], rest is dummy bits) we write/read from
 void FLASH_Column_Address(int s); //determines what 16-bit address (12-bits actually) we write/read from (plane bit dependent)
 
 void FLASH_Data_Storage(int s); //determines how to store FLASH NAND data in an array (Parameter page dependent)

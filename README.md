@@ -289,3 +289,9 @@ Starting to work around the idea of using the Erase Block thing. <br/>
 I really truly didn't understand NAND till now, basically in order to write into the Flash, I need to erase (reset to 1) the block I want to write to, then program it (change specific bits to 0). Which is interesting. This could very well be the reason why P_Fail occurs. <br/>
 I'm starting to show different status stuff, so something is happening. <br/>
 But, erasing still doesn't work and writing correctly into block also doesn't work right now. But progress is progress. <br/>
+
+5/20/25 <br/>
+So I only changed the block/page back to block 0 and page 0 (also 1, which is the parameter page) although I still get P_Fail in the status register. I can write and read...only until the power is off. Then everything erases...odd. <br/>
+Added a new operation, Flash Status, which only shows me the status register. Might be helpful...adding some delay operations with do-while...<br/>
+I added to polling do-while, that works. But the whole idea, still doesn't work. I even added something to check the block (Block Checker)...still unsure if that even works though...quite uneventful...<br/>
+No progress again...I'm running out of ideas...<br/>

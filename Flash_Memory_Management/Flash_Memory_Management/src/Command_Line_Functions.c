@@ -68,7 +68,7 @@ void ExecuteCommand(const char *str) //Execute Command Line function
 	{
 		s = 0; //sets main array address to normal operation
 		CLEAR_ARR();
-		FLASH_Erase(); //Erases Flash Block
+		FLASH_Block_Erase(); //Erases Flash Block
 	}
 	
 	else if (strcmp(str, "Write Test") == 0) //Basic Flash Test Command
@@ -80,13 +80,13 @@ void ExecuteCommand(const char *str) //Execute Command Line function
 		USART_Data(CommandBuffer); //will show what is in the array in question...
 		USART_TX_Data('\n');
 		
-		FLASH_Write_Data(); //adds user input into Flash Write Function, to memory...
+		FLASH_Page_Program(); //adds user input into Flash Write Function, to memory...
 		
-		//CLEAR_ARR();
 		//FLASH_Read();
 		
 		//USART_Data(data);
 	}
+	
 	else if (strcmp(str, "Read Memory") == 0) //Basic Read Test Command
 	{
 		s = 0; //sets main array to normal operations
@@ -96,6 +96,7 @@ void ExecuteCommand(const char *str) //Execute Command Line function
 		USART_Data(data);
 		USART_TX_Data('\n');
 	}
+	
 	else if (strcmp(str, "Parameter Page") == 0) //Basic Read Test Command
 	{
 		s = 2; //sets main array address to the correct place
@@ -109,11 +110,36 @@ void ExecuteCommand(const char *str) //Execute Command Line function
 			USART_Data(status_feature);
 		}	
 	}
+	
 	else if (strcmp(str, "Reset") == 0) //Basic Read Test Command
 	{
 		CLEAR_ARR();
 		FLASH_Reset();
 	}
+	
+	else if (strcmp(str, "Flash Status") == 0) //Read Flash NAND status register
+	{
+		CLEAR_ARR();
+		FLASH_Status();
+	}
+	
+	//this might stick as part of the main options, but its mostly meant for debugging bad blocks...
+	else if (strcmp(str, "Block Checker") == 0) //Determines if block is good or bad...
+	{
+		s = 1;
+		CLEAR_ARR();
+		FLASH_Read();
+
+		if (HEX_ID[0] != 0xFF) 
+		{
+			USART_Data("Block 15 is marked bad\n");
+		} 
+		else 
+		{
+			USART_Data("Block 15 appears clean\n");
+		}
+	}
+	
 	else
 	{
 		USART_Data("1) Flash ID \n");
@@ -121,6 +147,8 @@ void ExecuteCommand(const char *str) //Execute Command Line function
 		USART_Data("3) Write Test \n");
 		USART_Data("4) Read Memory \n");
 		USART_Data("5) Parameter Page \n");
-		USART_Data("6) Reset \n");
+		USART_Data("6) Flash Status \n");
+		USART_Data("7) Block Checker \n");
+		USART_Data("8) Reset \n");
 	}
 }
