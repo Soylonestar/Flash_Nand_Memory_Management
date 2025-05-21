@@ -295,3 +295,9 @@ So I only changed the block/page back to block 0 and page 0 (also 1, which is th
 Added a new operation, Flash Status, which only shows me the status register. Might be helpful...adding some delay operations with do-while...<br/>
 I added to polling do-while, that works. But the whole idea, still doesn't work. I even added something to check the block (Block Checker)...still unsure if that even works though...quite uneventful...<br/>
 No progress again...I'm running out of ideas...<br/>
+
+5/21/25 <br/>
+Decided to make the debugging process a little easier on me. So I changed my uart to accept uint8_t instead of char, and started on working on obtaining hex values based on my inputs. <br/>
+I do have a feature that prints out my hex numbers to make sure it correlates...hopefully I can use that value directly...<br/>
+Almost have it done entirely, then after that we'll need to change a couple of functions according to the byte addresses. <br/>
+Hopefully this will make the debugging process a little easier.<br/>

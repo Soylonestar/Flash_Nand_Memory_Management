@@ -12,6 +12,7 @@
 #define F_CPU 16000000UL //system clock 16MHz
 #define USART_BAUD 9600 //baud rate of USART
 
+
 #include <xc.h>
 #include <avr/io.h>
 #include <stdio.h>

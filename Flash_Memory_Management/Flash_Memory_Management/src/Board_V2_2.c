@@ -29,15 +29,15 @@ void USART_Init(void) //TXD0(PE1) setting USART0 on V2.2 Boards
 	PORTA |= (1 << PA2); //"enabling" RS232 USART0 (turning on)
 }
 
-void USART_Data (const char *str) //addresses String Data by the individual character addresses
+void USART_Data (const uint8_t *str) //addresses String Data by the individual uint8_t addresses
 {
 	for (size_t i = 0; i < strlen(str); i++)
 	{
-		USART_TX_Data(str[i]); //sends char data to Transmit function
+		USART_TX_Data(str[i]); //sends uint8_t data to Transmit function
 	}
 }
 
-void USART_TX_Data(char Data) //transmit char data type to serial (Transmit Function)
+void USART_TX_Data(uint8_t Data) //transmit uint8_t data type to serial (Transmit Function)
 {
 	while (!(UCSR0A & (1 << UDRE0))) //wait for empty transmit buffer...
 	{
@@ -46,13 +46,13 @@ void USART_TX_Data(char Data) //transmit char data type to serial (Transmit Func
 	UDR0 = Data; //Puts data into the buffer, sends the data through TX
 }
 
-char USART_RX_Data() //receive char data type from serial (Receive Function)
+uint8_t USART_RX_Data() //receive uint8_t data type from serial (Receive Function)
 {
 	while (!(UCSR0A & (1 << RXC0))) //wait for buffer to receive data...
 	{
 		;
 	}
-	return UDR0; //returns char data type in buffer
+	return UDR0; //returns uint8_t data type in buffer
 }
 
 void LED_Init()

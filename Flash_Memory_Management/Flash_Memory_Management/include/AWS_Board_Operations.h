@@ -10,9 +10,9 @@
 #define AWS_BOARD_OPERATIONS_H_
 
 void USART_Init(); //initialize USART for TX and RX
-void USART_Data(const char *str); //addresses String data by the individual character addresses
-void USART_TX_Data(char Data); //transmit char type data to serial RS232 USART0
-char USART_RX_Data(); //receives char type data from serial RS232 USART0
+void USART_Data(const uint8_t *str); //addresses String data by the individual uint8_t addresses
+void USART_TX_Data(uint8_t Data); //transmit uint8_t type data to serial RS232 USART0
+uint8_t USART_RX_Data(); //receives uint8_t type data from serial RS232 USART0
 
 void LED_Init(void); //initialize LEDs on Board
 void LED_Toggle(); //toggle LEDs on Board
