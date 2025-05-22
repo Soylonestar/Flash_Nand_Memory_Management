@@ -56,36 +56,46 @@ void UserInput() //asking for user input
 	arr_address = 0; //resets array at address 0
 }
 
-void HEX_Parser() //this is the function to convert uint8_t to hex
+void Print_To_User(int num_elements, int offset, const char *msg, const uint8_t *arr_start, uint8_t *arr_dest) //# of elements to print along with message, and to which array
+{
+	for (int i = 0; i < num_elements; i++)
+	{
+		sprintf(arr_dest, msg, arr_start[i + offset]);
+		USART_Data(arr_dest);
+	}
+}
+
+void HEX_Parser() //gets hex number for Column and Block/Page address
 {
 	UserInput(); //get the hex numbers
 	
 	static int call_count = 0;
 	
-	if (call_count = 0) //called the first time, so Column Address
+	if (call_count == 0) //called the first time, so Column Address
 	{
 		HEX_Verification();
-		for (int i = 0; i < 4; i+=2)
+		for (int i = 0; i < COLUMN_ADDRESS; i+=2)
 		{
 			Byte_Address[i] = CommandBuffer[i];
 			Byte_Address[i+1] = CommandBuffer[i+1];
 		}
+		Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, status_feature);
 		call_count++; //increment call count	
 	}
 	else //called a second time so, Block/Page Address
 	{
 		HEX_Verification();
-		
-		for (int i = 0; i < 6; i+=2)
+		for (int i = 0; i < BLOCK_PAGE_ADDRESS; i+=2)
 		{
 			Byte_Address[4 + i] = CommandBuffer[i];
 			Byte_Address[4 + (i+1)] = CommandBuffer[i+1];
 		}
+		Print_To_User(BLOCK_PAGE_ADDRESS, 4, "Block/Page Address -> 0x%02X \n", Byte_Address, status_feature);
 		call_count = 0; //reset
 	}
 }
 
-void HEX_Verification() //verifies Hex validity and allocated in appropriated location
+void HEX_Verification() //verifies uint8_t to Hex validity and allocates in appropriated location
 {
 	//parse the data into usable hex values
 	for (int i = 0; i < FLASH_NAND_ADDRESS_MAX; i++)
@@ -110,8 +120,7 @@ void HEX_Verification() //verifies Hex validity and allocated in appropriated lo
 		else
 		{
 			USART_Data("Wrong Input \n Make sure input is HEX valid [0 - F] \n");
-			sprintf(status_feature, "Here is what was inputted: (0x%02X)\n", CommandBuffer[i]); //hex data to string
-			USART_Data(status_feature);
+			Print_To_User(1, 0, "Here is what was inputted: 0x%02X \n", CommandBuffer, status_feature);
 			CLEAR_ARR();
 			HEX_Parser();
 		}
@@ -140,21 +149,14 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		
 		UserInput(); //User Input is added into an array, which will be written to memory
 		USART_Data(CommandBuffer); //will show what is in the array in question...
-		USART_TX_Data('\n');
 		
 		USART_Data("---Column Address--- 4 bytes \n");
 		HEX_Parser();
-		USART_TX_Data('\n');
 
 		USART_Data("---Block/Page Address--- 6 bytes \n");
 		HEX_Parser();
-		USART_TX_Data('\n');
 		
-		for (int i = 0; i < 10; i++)
-		{
-			sprintf(status_feature, "Here is what was inputted: (0x%02X)\n", Byte_Address[i]); //hex data to string
-			USART_Data(status_feature);
-		}
+		Print_To_User(10, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
 		
 		//FLASH_Page_Program(s, Byte_Address); //adds user input into Flash Write Function, to memory...
 	}
@@ -178,7 +180,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		//reading data from Data array
 		for (int i = 0; i < sizeof(data); i++) //address is incremented automatically after each byte is shifted out
 		{
-			sprintf(status_feature, "%i->Data Received: (0x%02X) \n", i, data[i]); //hex data to string
+			sprintf(status_feature, "%i->Data Received: 0x%02X \n", i, data[i]); //hex data to string
 			USART_Data(status_feature);
 		}	
 	}

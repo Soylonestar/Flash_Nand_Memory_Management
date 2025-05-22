@@ -10,8 +10,8 @@
 #define FLASH_NAND_MEMORY_H_
 
 #define FLASH_NAND_ADDRESS_MAX 10 //includes # of bytes for Column Address and Block/Page Address
-//#define COLUMN_ADDRESS 4 //# of bytes
-//#define BLOCK_PAGE_ADDRESS 6 //# of bytes
+#define COLUMN_ADDRESS 4 //# of bytes
+#define BLOCK_PAGE_ADDRESS 6 //# of bytes
 
 uint8_t data[254]; //actual data from FLASH_Nand Memory
 uint8_t status_feature[30];

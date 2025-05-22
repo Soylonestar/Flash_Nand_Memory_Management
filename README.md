@@ -303,4 +303,8 @@ Almost have it done entirely, then after that we'll need to change a couple of f
 Hopefully this will make the debugging process a little easier.<br/>
 
 5/22/25 <br/>
-<img src = "https://github.com/user-attachments/assets/6e6debec-2a6c-4797-8244-0237c5cf97a1" width = "600" />
+This is what I have at the moment, I got the last 6 hexs work, but the first 4 hexs don't work yet...<br/>
+<img src = "https://github.com/user-attachments/assets/6e6debec-2a6c-4797-8244-0237c5cf97a1" width = "600" /> <br/>
+
+This is what this looks like right now...kinda not ideal. I need to show 0x83 instead of 0x08 and 0x03. To actually apply this in the SPDR.<br/>
+<img src = "https://github.com/user-attachments/assets/195a1230-4196-440f-b045-9a09983c6cfc" width = "600" />

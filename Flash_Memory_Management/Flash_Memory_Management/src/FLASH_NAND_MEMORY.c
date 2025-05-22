@@ -47,9 +47,15 @@ void CLEAR_ARR(void) //to clear all relevant arrays with null
 	{
 		CommandBuffer[i] = '\0';
 	}
+	
 	for (int i = 0; i < sizeof(Byte_Address); i++)
 	{
 		Byte_Address[i] = '\0';
+	}
+	
+	for (int i = 0; i < sizeof(status_feature); i++)
+	{
+		status_feature[i] = '\0';
 	}
 }
 

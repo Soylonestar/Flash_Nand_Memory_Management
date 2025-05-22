@@ -21,4 +21,6 @@ int s; //this is for preset memory allocation (parameter pg for example);
 void HEX_Parser(); //this is the function to convert uint8_t to hex
 void HEX_Verification(); //this is for verifying hex values from user input
 
+void Print_To_User(int num_elements, int offset, const char *msg, const uint8_t *arr_start, uint8_t *arr_dest); //in need to transfer data from an array to another array with a message to print
+
 #endif /* COMMAND_LINE_FUNCTIONS_H_ */
