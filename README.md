@@ -301,3 +301,6 @@ Decided to make the debugging process a little easier on me. So I changed my uar
 I do have a feature that prints out my hex numbers to make sure it correlates...hopefully I can use that value directly...<br/>
 Almost have it done entirely, then after that we'll need to change a couple of functions according to the byte addresses. <br/>
 Hopefully this will make the debugging process a little easier.<br/>
+
+5/22/25 <br/>
+<img src = "https://github.com/user-attachments/assets/6e6debec-2a6c-4797-8244-0237c5cf97a1" width = "600" />
