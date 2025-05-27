@@ -9,22 +9,25 @@
 #ifndef FLASH_NAND_MEMORY_H_
 #define FLASH_NAND_MEMORY_H_
 
-#define FLASH_NAND_ADDRESS_MAX 10 //includes # of bytes for Column Address and Block/Page Address
-#define COLUMN_ADDRESS 4 //# of bytes
-#define BLOCK_PAGE_ADDRESS 6 //# of bytes
+#define FLASH_NAND_ADDRESS_MAX 5 //includes # of bytes for Column Address and Block/Page Address
+#define COLUMN_ADDRESS 2 //# of bytes
+#define BLOCK_PAGE_ADDRESS 3 //# of bytes
 
-uint8_t data[254]; //actual data from FLASH_Nand Memory
+#define PARAMETER_PAGE_SIZE 256 //this is just an example there is more...
+#define BYTES_PER_PAGE 2048 //# of bytes per page
+
+uint8_t data[300]; //actual data from FLASH_Nand Memory
 uint8_t status_feature[30];
-uint8_t HEX_ID[5]; //unsigned 8-bits for hex values
-uint8_t Byte_Address[FLASH_NAND_ADDRESS_MAX];
+uint8_t HEX_ID[5];
+uint8_t Byte_Address[FLASH_NAND_ADDRESS_MAX]; //unsigned 8-bits for hex values
 
 void SPI_MASTER_Init(); //initializes Serial Peripheral Interference (SPI) operations in Master Mode
 
 void FLASH_Write_Enable(); //select Slave device and initializes Write operations onto Flash NAND
 void FLASH_Write_Disable(); //de-select Slave device and disable Write operations onto Flash NAND
 
-void FLASH_Page_Program(int s, const uint8_t *array); //Write into addressed pages in Flash NAND
-void FLASH_Transfer_Cache(int s, const uint8_t *array); //new command to transfer data from cache to main array
+void FLASH_Page_Program(); //Write into addressed pages in Flash NAND
+void FLASH_Transfer_Cache(); //new command to transfer data from cache to main array
 void FLASH_Transfer_MainArray(); //new command to transfer data from main array to cache
 void FLASH_Read(); //reads data from FLASH_NAND Memory chip (SPI protocol)
 

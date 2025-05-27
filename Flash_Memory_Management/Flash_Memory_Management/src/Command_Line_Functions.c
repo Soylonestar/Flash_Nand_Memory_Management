@@ -12,14 +12,18 @@
 #include "../include/AWS_Board_Operations.h"
 
 int arr_address = 0; //for CommandBuffer array
+int input_counter = 0; //to count the number of input characters 
 
-void CommandLine()
-{	
+void UserInput(bool command) //asking for user input
+{
 	USART_Data("->User Input:\n"); //asking for User Input
 	
+	input_counter = 0; //reset input counter
+	
 	c = USART_RX_Data(); //receive user uint8_t data type input
-	while ((c != '\r') && (c!= '\n'))
+	while ((c != '\r')) //(c != '\n') &&
 	{
+		input_counter++; //increment input counter
 		CommandBuffer[arr_address] = c; //adding uint8_t into array at index, creating a string
 		if (arr_address >= sizeof(CommandBuffer)) //making this an endless array for command lines
 		{
@@ -28,32 +32,15 @@ void CommandLine()
 		arr_address++;
 		c = USART_RX_Data(); //receive user uint8_t data type input
 	}
+	//CommandBuffer[arr_address] = '\n';
 	CommandBuffer[arr_address] = '\0'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
 	arr_address = 0; //resets array at address 0
 	
 	USART_Data(CommandBuffer); //shows what the user wrote on terminal
 	USART_TX_Data('\n');
-		
-	ExecuteCommand(CommandBuffer); //puts CommandLine into Execute Function...
-}
-
-void UserInput() //asking for user input
-{
-	USART_Data("User Input:\n"); //asking for User Input
 	
-	c = USART_RX_Data(); //receive user uint8_t data type input
-	while ((c != '\r')) //(c != '\n') &&
-	{
-		CommandBuffer[arr_address] = c; //adding uint8_t into array at index, creating a string
-		if (arr_address >= sizeof(CommandBuffer)) //making this an endless array for command lines
-		{
-			arr_address = 0; //resets array at address 0
-		}
-		arr_address++;
-		c = USART_RX_Data(); //receive user uint8_t data type input
-	}
-	CommandBuffer[arr_address] = '\r'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
-	arr_address = 0; //resets array at address 0
+	if (command)
+		ExecuteCommand(CommandBuffer); //if command true, pass command to execute function
 }
 
 void Print_To_User(int num_elements, int offset, const char *msg, const uint8_t *arr_start, uint8_t *arr_dest) //# of elements to print along with message, and to which array
@@ -67,38 +54,52 @@ void Print_To_User(int num_elements, int offset, const char *msg, const uint8_t 
 
 void HEX_Parser() //gets hex number for Column and Block/Page address
 {
-	UserInput(); //get the hex numbers
+	UserInput(false); //get the hex numbers
 	
 	static int call_count = 0;
 	
 	if (call_count == 0) //called the first time, so Column Address
 	{
-		HEX_Verification();
-		for (int i = 0; i < COLUMN_ADDRESS; i+=2)
+		if (input_counter > 4)
 		{
-			Byte_Address[i] = CommandBuffer[i];
-			Byte_Address[i+1] = CommandBuffer[i+1];
+			USART_Data("One to many. Make sure only 4 inputs. \n");
+			UserInput(false);
 		}
+		
+		HEX_Verification();
+		
+		for (int i = 0; i < COLUMN_ADDRESS + 1; i+=2)
+		{
+			Byte_Address[i / 2] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
+		}
+		
 		Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, status_feature);
 		call_count++; //increment call count	
 	}
 	else //called a second time so, Block/Page Address
 	{
-		HEX_Verification();
-		for (int i = 0; i < BLOCK_PAGE_ADDRESS; i+=2)
+		if (input_counter > 6)
 		{
-			Byte_Address[4 + i] = CommandBuffer[i];
-			Byte_Address[4 + (i+1)] = CommandBuffer[i+1];
+			USART_Data("One to many. Make sure only 6 inputs. \n");
+			UserInput(false);
 		}
-		Print_To_User(BLOCK_PAGE_ADDRESS, 4, "Block/Page Address -> 0x%02X \n", Byte_Address, status_feature);
+		
+		HEX_Verification();
+		
+		for (int i = 0; i < BLOCK_PAGE_ADDRESS + 2; i+=2)
+		{
+			Byte_Address[COLUMN_ADDRESS + (i / 2)] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
+		}
+		
+		Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "Block/Page Address -> 0x%02X \n", Byte_Address, status_feature);
 		call_count = 0; //reset
 	}
 }
 
-void HEX_Verification() //verifies uint8_t to Hex validity and allocates in appropriated location
+void HEX_Verification() //verifies uint8_t (ASCII) to Hex validity and allocates in appropriated location
 {
 	//parse the data into usable hex values
-	for (int i = 0; i < FLASH_NAND_ADDRESS_MAX; i++)
+	for (int i = 0; i <= FLASH_NAND_ADDRESS_MAX; i++)
 	{
 		if (CommandBuffer[i] >= '0' && CommandBuffer[i] <= '9')
 		{
@@ -112,19 +113,28 @@ void HEX_Verification() //verifies uint8_t to Hex validity and allocates in appr
 		{
 			CommandBuffer[i] = CommandBuffer[i] - 'a' + 10;
 		}
-		else if (CommandBuffer[i] == '\r')
+		else if (CommandBuffer[i] == '\r' || CommandBuffer[i] == '\n' || CommandBuffer[i] == '\0')
 		{
-			//CommandBuffer[i] = '\0'; //to reset that element to null
 			break;
 		}
 		else
 		{
-			USART_Data("Wrong Input \n Make sure input is HEX valid [0 - F] \n");
+			USART_Data("Wrong Input \nMake sure input is HEX valid [0 - F] \n");
 			Print_To_User(1, 0, "Here is what was inputted: 0x%02X \n", CommandBuffer, status_feature);
 			CLEAR_ARR();
 			HEX_Parser();
 		}
 	}
+	//Print_To_User(6, 0, "Parsed nibble: 0x%02X\n", CommandBuffer, status_feature); //troubleshooting, verifies if ASCII is converted to hex values
+}
+
+void NAND_Address_Checker() //returns user the Column and Block/Page Addresses
+{
+	USART_Data("---Column Address--- 2 bytes \n");
+	Print_To_User(COLUMN_ADDRESS, 0, "0x%02X \n", Byte_Address, status_feature);
+
+	USART_Data("---Block/Page Address--- 3 bytes \n");	
+	Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "0x%02X \n", Byte_Address, status_feature);
 }
 
 void ExecuteCommand(const uint8_t *str) //Execute Command Line function
@@ -139,7 +149,12 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	{
 		s = 0; //sets main array address to normal operation
 		CLEAR_ARR();
-		//FLASH_Block_Erase(); //Erases Flash Block
+		FLASH_Block_Erase(); //Erases Flash Block
+	}
+	
+	else if (strcmp(str, "NAND Addresses") == 0) //Tells user what is Column and Block/Page Addresses
+	{
+		NAND_Address_Checker();
 	}
 	
 	else if (strcmp(str, "Write Test") == 0) //Basic Flash Test Command
@@ -147,25 +162,24 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		s = 0;
 		CLEAR_ARR();
 		
-		UserInput(); //User Input is added into an array, which will be written to memory
-		USART_Data(CommandBuffer); //will show what is in the array in question...
+		UserInput(false); //User Input is added into an array, which will be written to memory
 		
-		USART_Data("---Column Address--- 4 bytes \n");
+		USART_Data("---Column Address--- 2 bytes \n");
 		HEX_Parser();
 
-		USART_Data("---Block/Page Address--- 6 bytes \n");
+		USART_Data("---Block/Page Address--- 3 bytes \n");
 		HEX_Parser();
 		
-		Print_To_User(10, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
+		Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
 		
-		//FLASH_Page_Program(s, Byte_Address); //adds user input into Flash Write Function, to memory...
+		FLASH_Page_Program(); //adds user input into Flash Write Function, to memory...
 	}
 	
 	else if (strcmp(str, "Read Memory") == 0) //Basic Read Test Command
 	{
 		s = 0; //sets main array to normal operations
 		CLEAR_ARR();
-		//FLASH_Read();
+		FLASH_Read();
 
 		USART_Data(data);
 		USART_TX_Data('\n');
@@ -173,22 +187,16 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	
 	else if (strcmp(str, "Parameter Page") == 0) //Basic Read Test Command
 	{
-		s = 2; //sets main array address to the correct place
+		s = 1; //sets main array address to the correct place
 		CLEAR_ARR();
-		//FLASH_Para_Pg();
+		FLASH_Para_Pg();
 		
 		//reading data from Data array
-		for (int i = 0; i < sizeof(data); i++) //address is incremented automatically after each byte is shifted out
+		for (int i = 0; i < PARAMETER_PAGE_SIZE; i++) //address is incremented automatically after each byte is shifted out
 		{
 			sprintf(status_feature, "%i->Data Received: 0x%02X \n", i, data[i]); //hex data to string
 			USART_Data(status_feature);
 		}	
-	}
-	
-	else if (strcmp(str, "Reset") == 0) //Basic Read Test Command
-	{
-		CLEAR_ARR();
-		FLASH_Reset();
 	}
 	
 	else if (strcmp(str, "Flash Status") == 0) //Read Flash NAND status register
@@ -200,7 +208,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	//this might stick as part of the main options, but its mostly meant for debugging bad blocks...
 	else if (strcmp(str, "Block Checker") == 0) //Determines if block is good or bad...
 	{
-		s = 1;
+		s = 0;
 		CLEAR_ARR();
 		FLASH_Read();
 
@@ -214,6 +222,12 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		}
 	}
 	
+	else if (strcmp(str, "Reset") == 0) //Basic Read Test Command
+	{
+		CLEAR_ARR();
+		FLASH_Reset();
+	}
+	
 	else
 	{
 		USART_Data("1) Flash ID \n");
@@ -223,6 +237,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		USART_Data("5) Parameter Page \n");
 		USART_Data("6) Flash Status \n");
 		USART_Data("7) Block Checker \n");
-		USART_Data("8) Reset \n");
+		USART_Data("8) NAND Addresses \n");
+		USART_Data("9) Reset \n");
 	}
 }

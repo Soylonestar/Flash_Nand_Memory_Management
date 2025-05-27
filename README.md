@@ -308,3 +308,12 @@ This is what I have at the moment, I got the last 6 hexs work, but the first 4 h
 
 This is what this looks like right now...kinda not ideal. I need to show 0x83 instead of 0x08 and 0x03. To actually apply this in the SPDR.<br/>
 <img src = "https://github.com/user-attachments/assets/195a1230-4196-440f-b045-9a09983c6cfc" width = "600" />
+
+5/27/25 <br/>
+Going to fix the hex stuff today, shouldn't be too much of a hassle. <br/>
+Alright, took longer than expected, but kinda got to fixing other things while progressing in fixing the hex conversion and representation. <br/>
+But right now, that works...look <br/>
+<img src = "https://github.com/user-attachments/assets/a86a8e4d-7cb8-425a-978f-fbac953c3780" width = "500"/> <br/>
+Created a couple of new functions, simplified a couple of methods. But right now, the hex values seem to work. Not to long, but I'll go back to debugging the Flash NAND again in a few. <br/>
+Going to create a test method, that iterates through one entire block (or maybe the whole flash, we'll see), and see what block/pages are valid...<br/>
+
