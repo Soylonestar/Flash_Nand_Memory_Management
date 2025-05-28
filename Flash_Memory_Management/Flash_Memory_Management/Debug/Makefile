@@ -43,7 +43,8 @@ C_SRCS +=  \
 ../src/Board_V2_1.c \
 ../src/Board_V2_2.c \
 ../src/Command_Line_Functions.c \
-../src/FLASH_NAND_MEMORY.c
+../src/FLASH_NAND_MEMORY.c \
+../src/NAND_Flash_Formatter.c
 
 
 PREPROCESSING_SRCS += 
@@ -57,28 +58,32 @@ main.o \
 src/Board_V2_1.o \
 src/Board_V2_2.o \
 src/Command_Line_Functions.o \
-src/FLASH_NAND_MEMORY.o
+src/FLASH_NAND_MEMORY.o \
+src/NAND_Flash_Formatter.o
 
 OBJS_AS_ARGS +=  \
 main.o \
 src/Board_V2_1.o \
 src/Board_V2_2.o \
 src/Command_Line_Functions.o \
-src/FLASH_NAND_MEMORY.o
+src/FLASH_NAND_MEMORY.o \
+src/NAND_Flash_Formatter.o
 
 C_DEPS +=  \
 main.d \
 src/Board_V2_1.d \
 src/Board_V2_2.d \
 src/Command_Line_Functions.d \
-src/FLASH_NAND_MEMORY.d
+src/FLASH_NAND_MEMORY.d \
+src/NAND_Flash_Formatter.d
 
 C_DEPS_AS_ARGS +=  \
 main.d \
 src/Board_V2_1.d \
 src/Board_V2_2.d \
 src/Command_Line_Functions.d \
-src/FLASH_NAND_MEMORY.d
+src/FLASH_NAND_MEMORY.d \
+src/NAND_Flash_Formatter.d
 
 OUTPUT_FILE_PATH +=Flash_Memory_Management.elf
 
@@ -123,6 +128,13 @@ src/Command_Line_Functions.o: ../src/Command_Line_Functions.c
 	
 
 src/FLASH_NAND_MEMORY.o: ../src/FLASH_NAND_MEMORY.c
+	@echo Building file: $<
+	@echo Invoking: XC8 C Compiler : 2.36
+	$(QUOTE)C:\Program Files\Microchip\xc8\v2.36\bin\xc8-cc.exe$(QUOTE)  -mcpu=ATmega2560  -mdfp="C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\xc8"  -c -x c -funsigned-char -funsigned-bitfields -mext=cci -D__ATmega2560__ -DDEBUG  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/NAND_Flash_Formatter.o: ../src/NAND_Flash_Formatter.c
 	@echo Building file: $<
 	@echo Invoking: XC8 C Compiler : 2.36
 	$(QUOTE)C:\Program Files\Microchip\xc8\v2.36\bin\xc8-cc.exe$(QUOTE)  -mcpu=ATmega2560  -mdfp="C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\xc8"  -c -x c -funsigned-char -funsigned-bitfields -mext=cci -D__ATmega2560__ -DDEBUG  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

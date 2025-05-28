@@ -13,6 +13,7 @@
 #include "../include/SPI_NAND_Commands.h"
 #include "../include/AWS_Board_Operations.h"
 #include "../include/Command_Line_Functions.h"
+#include "../include/NAND_Flash_Formatter.h"
 
 uint8_t status; //read Data register to clear SPIF flag (uselessbyte only)
 

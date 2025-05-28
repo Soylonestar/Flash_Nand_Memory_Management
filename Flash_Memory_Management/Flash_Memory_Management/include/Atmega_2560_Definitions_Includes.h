@@ -9,6 +9,8 @@
 #ifndef ATMEGA_2560_DEFINITIONS_INCLUDES_H_
 #define ATMEGA_2560_DEFINITIONS_INCLUDES_H_
 
+/*The following is basics libraries and our microcontroller parameters*/
+
 #define F_CPU 16000000UL //system clock 16MHz
 #define USART_BAUD 9600 //baud rate of USART
 

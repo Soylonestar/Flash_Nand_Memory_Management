@@ -12,3 +12,5 @@ src\Command_Line_Functions.c
 
 src\FLASH_NAND_MEMORY.c
 
+src\NAND_Flash_Formatter.c
+

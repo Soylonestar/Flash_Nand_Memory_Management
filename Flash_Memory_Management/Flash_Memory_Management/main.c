@@ -34,13 +34,10 @@ int main(void)
 		CLEAR_ARR();
 		USART_Data("->Arrays Cleared \n");
 		
-		//CommandLine(true); //asking for user command line
 		UserInput(true); //true therefore command
 		
 		LED_Red_Toggle();
 		_delay_ms(100);
 		
-		//FLASH_Write_Data();
-		//FLASH_Read();
 	}
 }

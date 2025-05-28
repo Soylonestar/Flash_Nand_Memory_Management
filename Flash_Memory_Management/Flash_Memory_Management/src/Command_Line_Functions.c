@@ -10,6 +10,7 @@
 #include "../include/Command_Line_Functions.h"
 #include "../include/FLASH_NAND_MEMORY.h"
 #include "../include/AWS_Board_Operations.h"
+#include "../include/NAND_Flash_Formatter.h"
 
 int arr_address = 0; //for CommandBuffer array
 int input_counter = 0; //to count the number of input characters 
@@ -52,13 +53,13 @@ void Print_To_User(int num_elements, int offset, const char *msg, const uint8_t 
 	}
 }
 
-void HEX_Parser() //gets hex number for Column and Block/Page address
+void HEX_Parser(bool addr_type) //gets hex number for Column and Block/Page address
 {
+	bool temp = addr_type; ///CHANGE!!!!!!!
+	
 	UserInput(false); //get the hex numbers
 	
-	static int call_count = 0;
-	
-	if (call_count == 0) //called the first time, so Column Address
+	if (addr_type == false) //false, so address type is Column Address
 	{
 		if (input_counter > 4)
 		{
@@ -73,10 +74,9 @@ void HEX_Parser() //gets hex number for Column and Block/Page address
 			Byte_Address[i / 2] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
 		}
 		
-		Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, status_feature);
-		call_count++; //increment call count	
+		Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, status_feature);	
 	}
-	else //called a second time so, Block/Page Address
+	else //true Block/Page Address
 	{
 		if (input_counter > 6)
 		{
@@ -92,7 +92,6 @@ void HEX_Parser() //gets hex number for Column and Block/Page address
 		}
 		
 		Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "Block/Page Address -> 0x%02X \n", Byte_Address, status_feature);
-		call_count = 0; //reset
 	}
 }
 
@@ -122,7 +121,7 @@ void HEX_Verification() //verifies uint8_t (ASCII) to Hex validity and allocates
 			USART_Data("Wrong Input \nMake sure input is HEX valid [0 - F] \n");
 			Print_To_User(1, 0, "Here is what was inputted: 0x%02X \n", CommandBuffer, status_feature);
 			CLEAR_ARR();
-			HEX_Parser();
+			HEX_Parser(false);
 		}
 	}
 	//Print_To_User(6, 0, "Parsed nibble: 0x%02X\n", CommandBuffer, status_feature); //troubleshooting, verifies if ASCII is converted to hex values
@@ -165,10 +164,10 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		UserInput(false); //User Input is added into an array, which will be written to memory
 		
 		USART_Data("---Column Address--- 2 bytes \n");
-		HEX_Parser();
+		HEX_Parser(false);
 
 		USART_Data("---Block/Page Address--- 3 bytes \n");
-		HEX_Parser();
+		HEX_Parser(true);
 		
 		Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
 		
@@ -214,11 +213,11 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 
 		if (HEX_ID[0] != 0xFF) 
 		{
-			USART_Data("Block 15 is marked bad\n");
+			USART_Data("Block is marked bad\n");
 		} 
 		else 
 		{
-			USART_Data("Block 15 appears clean\n");
+			USART_Data("Block appears clean\n");
 		}
 	}
 	

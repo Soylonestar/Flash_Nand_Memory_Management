@@ -26,7 +26,8 @@ src/FLASH_NAND_MEMORY.d src/FLASH_NAND_MEMORY.o: \
  ../src/../include/FLASH_NAND_MEMORY.h \
  ../src/../include/SPI_NAND_Commands.h \
  ../src/../include/AWS_Board_Operations.h \
- ../src/../include/Command_Line_Functions.h
+ ../src/../include/Command_Line_Functions.h \
+ ../src/../include/NAND_Flash_Formatter.h
 
 ../src/../include/Atmega_2560_Definitions_Includes.h:
 
@@ -81,3 +82,5 @@ c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h:
 ../src/../include/AWS_Board_Operations.h:
 
 ../src/../include/Command_Line_Functions.h:
+
+../src/../include/NAND_Flash_Formatter.h:

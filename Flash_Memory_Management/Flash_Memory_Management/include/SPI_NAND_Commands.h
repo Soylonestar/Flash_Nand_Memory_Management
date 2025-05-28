@@ -9,6 +9,8 @@
 #ifndef SPI_NAND_COMMANDS_H_
 #define SPI_NAND_COMMANDS_H_
 
+/*These are the Command bytes to send to the FLASH NAND*/
+
 #define WRITE_ENABLED 0x06 //write enable command's address; enables change onto Flash_NAND memory
 #define WRITE_DISABLED 0x04 //write disabled command's address; disables change onto Flash_NAND memory
 #define PROGRAM_LOAD 0x02 //program load command's address; allows data to be written onto Cache registers

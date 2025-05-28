@@ -9,17 +9,31 @@
 #ifndef FLASH_NAND_MEMORY_H_
 #define FLASH_NAND_MEMORY_H_
 
+/*The following are parameters of the FLASH NAND*/
+
 #define FLASH_NAND_ADDRESS_MAX 5 //includes # of bytes for Column Address and Block/Page Address
 #define COLUMN_ADDRESS 2 //# of bytes
 #define BLOCK_PAGE_ADDRESS 3 //# of bytes
 
 #define PARAMETER_PAGE_SIZE 256 //this is just an example there is more...
-#define BYTES_PER_PAGE 2048 //# of bytes per page
+
+#define DATA_BYTES_PER_PAGE 2048 //# of data bytes per page
+#define SPARE_BYTES_PER_PAGE 128 //# of spare bytes per page
+#define DATA_BYTES_PER_PARTIAL_PAGE 512 //# of data bytes per partial page
+#define SPARE_BYTES_PER_PARTIAL_PAGE 32 //# of spare bytes per partial page
+#define PAGES_PER_BLOCK 64 //# of pages per block
+#define BLOCKS_PER_DIE 2048 //# of blocks per die
+#define DIE_PER_MODULE 1 //# of dies
+#define MAXIMUM_BAD_BLOCKS_PER_DIE 40 //# of bad blocks per die
+
+/*Here is where Flash NAND parameters ends*/
 
 uint8_t data[300]; //actual data from FLASH_Nand Memory
 uint8_t status_feature[30];
 uint8_t HEX_ID[5];
 uint8_t Byte_Address[FLASH_NAND_ADDRESS_MAX]; //unsigned 8-bits for hex values
+
+/*The following is the functions to talk/read from the FLASH NAND*/
 
 void SPI_MASTER_Init(); //initializes Serial Peripheral Interference (SPI) operations in Master Mode
 
@@ -44,5 +58,7 @@ void FLASH_MainArray_Address(int s, const uint8_t *array); //determines what 24-
 void FLASH_Column_Address(int s, const uint8_t *array); //determines what 16-bit address (12-bits actually) we write/read from (plane bit dependent)
 
 void FLASH_Data_Storage(int s); //determines how to store FLASH NAND data in an array (Parameter page dependent)
+
+/*Here is where the FLASH functions ends*/
 
 #endif /* FLASH_NAND_MEMORY_H_ */

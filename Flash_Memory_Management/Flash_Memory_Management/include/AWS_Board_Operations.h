@@ -9,6 +9,8 @@
 #ifndef AWS_BOARD_OPERATIONS_H_
 #define AWS_BOARD_OPERATIONS_H_
 
+/*This our basic board operations, unique for our board*/
+
 void USART_Init(); //initialize USART for TX and RX
 void USART_Data(const uint8_t *str); //addresses String data by the individual uint8_t addresses
 void USART_TX_Data(uint8_t Data); //transmit uint8_t type data to serial RS232 USART0

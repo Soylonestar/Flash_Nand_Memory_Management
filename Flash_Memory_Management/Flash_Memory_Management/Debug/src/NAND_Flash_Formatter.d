@@ -1,5 +1,5 @@
-src/Command_Line_Functions.d src/Command_Line_Functions.o: \
- ../src/Command_Line_Functions.c \
+src/NAND_Flash_Formatter.d src/NAND_Flash_Formatter.o: \
+ ../src/NAND_Flash_Formatter.c \
  ../src/../include/Atmega_2560_Definitions_Includes.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\xc.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\cci.h \

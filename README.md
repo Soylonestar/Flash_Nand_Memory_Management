@@ -1,11 +1,11 @@
 # FLASH_MEMORY_MANAGEMENT
 
-To communicate with the inbuilt FLASH NAND 4GB (Flash Memory) on our boards. Which we'll use the SPI (Serial Peripheral Interface). But we'll see where it goes. <br/>
+The purpose of this is to create a driver for FLASH NAND 2GB and 4GB for our boards. With working communication with device to microcontroller, and with a working format for our use. But we'll see where it goes. <br/>
 
-The board that I'll be using is V2.2 board but, for testing purposes I'll primarily be using V2.1 board. Just keep that in mind. <br/>
+The board that I'll be using is our V2.2 board but, for testing purposes I'll primarily be using V2.1 board. Just keep that in mind. <br/>
 
 Update: <br/>
-Mostly using the V2.2 board. <br/>
+Mostly using the V2.2 board now... <br/>
 
 1) Understanding how SPI works.
 2) Make sure that SPI operates correctly.
@@ -316,4 +316,7 @@ But right now, that works...look <br/>
 <img src = "https://github.com/user-attachments/assets/a86a8e4d-7cb8-425a-978f-fbac953c3780" width = "500"/> <br/>
 Created a couple of new functions, simplified a couple of methods. But right now, the hex values seem to work. Not to long, but I'll go back to debugging the Flash NAND again in a few. <br/>
 Going to create a test method, that iterates through one entire block (or maybe the whole flash, we'll see), and see what block/pages are valid...<br/>
+
+5/28/25 <br/>
+Tackling on creating test methods to determine my range in writeable blocks/page for FLASH NAND <br/>
 
