@@ -14,12 +14,15 @@
 
 void Page_Tester() //tests each page per block
 {
+	 //first obtain Columns and Block/Page addresses
+	USART_Data("---Column Address--- 2 bytes \n");
+	COLUMN_BLOCK_PAGE_ADDRESSER(false);
+
+	USART_Data("---Block/Page Address--- 3 bytes \n");
+	COLUMN_BLOCK_PAGE_ADDRESSER(true);
 	
-	
-	 uint8_t block_page_start = 0x00; //
-	 
-	 for (int i = 0; i < DATA_BYTES_PER_PAGE; i++)
-	 {
-		 ;
-	 }
+	for (int i = 0; i < DATA_BYTES_PER_PAGE; i++)
+	{
+		;
+	}
 }

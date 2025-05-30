@@ -23,4 +23,6 @@
 #include <avr/interrupt.h>
 #include <stdbool.h>
 
+#include <stdarg.h>
+
 #endif /* ATMEGA_2560_DEFINITIONS_INCLUDES_H_ */

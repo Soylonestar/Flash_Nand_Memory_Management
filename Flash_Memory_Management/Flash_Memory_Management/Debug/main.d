@@ -22,6 +22,7 @@ main.d main.o: .././main.c \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h \
+ c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h \
  .././include/SPI_NAND_Commands.h .././include/AWS_Board_Operations.h \
  .././include/FLASH_NAND_MEMORY.h .././include/Command_Line_Functions.h
 
@@ -70,6 +71,8 @@ c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h:
 c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h:
 
 c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h:
+
+c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h:
 
 .././include/SPI_NAND_Commands.h:
 

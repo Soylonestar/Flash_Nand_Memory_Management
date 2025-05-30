@@ -41,9 +41,11 @@ void FLASH_Write_Enable(); //select Slave device and initializes Write operation
 void FLASH_Write_Disable(); //de-select Slave device and disable Write operations onto Flash NAND
 
 void FLASH_Page_Program(); //Write into addressed pages in Flash NAND
-void FLASH_Transfer_Cache(); //new command to transfer data from cache to main array
-void FLASH_Transfer_MainArray(); //new command to transfer data from main array to cache
-void FLASH_Read(); //reads data from FLASH_NAND Memory chip (SPI protocol)
+void FLASH_Program_Execute(); //command to transfer data from cache register to block/page array
+void FLASH_Random_Data_Program_x1(); //writes or replaces data in a page with existing data 
+ 
+void FLASH_Page_Read(); //transfers data from block/page array to Cache Register
+void FLASH_Read_From_Cache_x1(); //read data out of the cache register
 
 void FLASH_Block_Erase(); //erases data from Flash NAND Memory at the block level
 void FLASH_ID(); //read device ID
@@ -54,8 +56,8 @@ void FLASH_Para_Pg(); //reads from the FLASH NAND parameter page
 void CLEAR_ARR();//clears Arrays
 void FLASH_Status(); //checks status till the data completes transferring
 
-void FLASH_MainArray_Address(int s, const uint8_t *array); //determines what 24-bit address (17-bits [block/page], rest is dummy bits) we write/read from
-void FLASH_Column_Address(int s, const uint8_t *array); //determines what 16-bit address (12-bits actually) we write/read from (plane bit dependent)
+void FLASH_MainArray_Address(int s, const uint8_t *array); //determines what 24-bit address (17-bits [block/page], rest is dummy bits) we write/read in the block/page array
+void FLASH_Column_Address(int s, const uint8_t *array); //determines what 16-bit address (12-bits actually, plane bit dependent) we write/read from in the cache register
 
 void FLASH_Data_Storage(int s); //determines how to store FLASH NAND data in an array (Parameter page dependent)
 

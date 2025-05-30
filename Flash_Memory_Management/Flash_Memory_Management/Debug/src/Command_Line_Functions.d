@@ -23,6 +23,7 @@ src/Command_Line_Functions.d src/Command_Line_Functions.o: \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h \
+ c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h \
  ../src/../include/Command_Line_Functions.h \
  ../src/../include/FLASH_NAND_MEMORY.h \
  ../src/../include/AWS_Board_Operations.h \
@@ -73,6 +74,8 @@ c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h:
 c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h:
 
 c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h:
+
+c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h:
 
 ../src/../include/Command_Line_Functions.h:
 

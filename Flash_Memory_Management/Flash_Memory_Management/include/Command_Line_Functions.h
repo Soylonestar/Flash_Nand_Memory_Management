@@ -19,10 +19,12 @@ uint8_t c; //for receiving USART_RX_Data
 
 int s; //this is for preset memory allocation (parameter pg for example);
 
-void HEX_Parser(bool addr_type); //this function puts hex values for false (Column Addr.) or true (Block/Page Addr.)
-void HEX_Verification(); //this is for conversion to hex values from ASCII (uint8_t) user input
+void COLUMN_BLOCK_PAGE_ADDRESSER(bool addr_type); //this function puts hex values for false (Column Addr.) or true (Block/Page Addr.)
+bool HEX_Verification(); //this is for conversion to hex values from ASCII (uint8_t) user input; returns bool
 
+/*Downside to this method is that it can only print only one argument can be written in the method's msg*/
 void Print_To_User(int num_elements, int offset, const char *msg, const uint8_t *arr_start, uint8_t *arr_dest); //in need to transfer data from an array to another array with a message to print
+
 void NAND_Address_Checker(); //returns user the Column and Block/Page Addresses
 
 #endif /* COMMAND_LINE_FUNCTIONS_H_ */

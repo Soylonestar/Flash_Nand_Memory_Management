@@ -53,11 +53,9 @@ void Print_To_User(int num_elements, int offset, const char *msg, const uint8_t 
 	}
 }
 
-void HEX_Parser(bool addr_type) //gets hex number for Column and Block/Page address
+void COLUMN_BLOCK_PAGE_ADDRESSER(bool addr_type) //gets hex number for Column and Block/Page address
 {
-	bool temp = addr_type; ///CHANGE!!!!!!!
-	
-	UserInput(false); //get the hex numbers
+	UserInput(false); //get the hex numbers, false because not command
 	
 	if (addr_type == false) //false, so address type is Column Address
 	{
@@ -67,16 +65,21 @@ void HEX_Parser(bool addr_type) //gets hex number for Column and Block/Page addr
 			UserInput(false);
 		}
 		
-		HEX_Verification();
-		
-		for (int i = 0; i < COLUMN_ADDRESS + 1; i+=2)
+		if (HEX_Verification()) //if true (valid)
 		{
-			Byte_Address[i / 2] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
+			for (int i = 0; i < COLUMN_ADDRESS + 1; i+=2)
+			{
+				Byte_Address[i / 2] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
+			}
+			
+			Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, status_feature);	
 		}
-		
-		Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, status_feature);	
+		else
+		{
+			COLUMN_BLOCK_PAGE_ADDRESSER(addr_type); //call again
+		}
 	}
-	else //true Block/Page Address
+	else //true, so address type is Block/Page Address
 	{
 		if (input_counter > 6)
 		{
@@ -84,18 +87,23 @@ void HEX_Parser(bool addr_type) //gets hex number for Column and Block/Page addr
 			UserInput(false);
 		}
 		
-		HEX_Verification();
-		
-		for (int i = 0; i < BLOCK_PAGE_ADDRESS + 2; i+=2)
+		if(HEX_Verification()) //if true (valid)
 		{
-			Byte_Address[COLUMN_ADDRESS + (i / 2)] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
+			for (int i = 0; i < BLOCK_PAGE_ADDRESS + 2; i+=2)
+			{
+				Byte_Address[COLUMN_ADDRESS + (i / 2)] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
+			}
+			
+			Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "Block/Page Address -> 0x%02X \n", Byte_Address, status_feature);
 		}
-		
-		Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "Block/Page Address -> 0x%02X \n", Byte_Address, status_feature);
+		else
+		{
+			COLUMN_BLOCK_PAGE_ADDRESSER(addr_type); //call again
+		}
 	}
 }
 
-void HEX_Verification() //verifies uint8_t (ASCII) to Hex validity and allocates in appropriated location
+bool HEX_Verification() //verifies uint8_t (ASCII) to Hex validity and allocates in appropriated location
 {
 	//parse the data into usable hex values
 	for (int i = 0; i <= FLASH_NAND_ADDRESS_MAX; i++)
@@ -121,9 +129,10 @@ void HEX_Verification() //verifies uint8_t (ASCII) to Hex validity and allocates
 			USART_Data("Wrong Input \nMake sure input is HEX valid [0 - F] \n");
 			Print_To_User(1, 0, "Here is what was inputted: 0x%02X \n", CommandBuffer, status_feature);
 			CLEAR_ARR();
-			HEX_Parser(false);
+			return false; //return false, indicating failed test
 		}
 	}
+	return true; //return true, indicating passed test
 	//Print_To_User(6, 0, "Parsed nibble: 0x%02X\n", CommandBuffer, status_feature); //troubleshooting, verifies if ASCII is converted to hex values
 }
 
@@ -164,10 +173,10 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		UserInput(false); //User Input is added into an array, which will be written to memory
 		
 		USART_Data("---Column Address--- 2 bytes \n");
-		HEX_Parser(false);
+		COLUMN_BLOCK_PAGE_ADDRESSER(false);
 
 		USART_Data("---Block/Page Address--- 3 bytes \n");
-		HEX_Parser(true);
+		COLUMN_BLOCK_PAGE_ADDRESSER(true);
 		
 		Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
 		
@@ -178,7 +187,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	{
 		s = 0; //sets main array to normal operations
 		CLEAR_ARR();
-		FLASH_Read();
+		FLASH_Page_Read();
 
 		USART_Data(data);
 		USART_TX_Data('\n');
@@ -191,6 +200,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		FLASH_Para_Pg();
 		
 		//reading data from Data array
+		//Print_To_User(PARAMETER_PAGE_SIZE, 0, "%i->Data Received: 0x%02X \n", data, status_feature);
+		
 		for (int i = 0; i < PARAMETER_PAGE_SIZE; i++) //address is incremented automatically after each byte is shifted out
 		{
 			sprintf(status_feature, "%i->Data Received: 0x%02X \n", i, data[i]); //hex data to string
@@ -209,7 +220,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	{
 		s = 0;
 		CLEAR_ARR();
-		FLASH_Read();
+		FLASH_Page_Read();
 
 		if (HEX_ID[0] != 0xFF) 
 		{

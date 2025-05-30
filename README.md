@@ -320,3 +320,5 @@ Going to create a test method, that iterates through one entire block (or maybe 
 5/28/25 <br/>
 Tackling on creating test methods to determine my range in writeable blocks/page for FLASH NAND <br/>
 
+5/30/25 <br/>
+Working on the test methods, and also opening cans of worms in changing a couple of functions. <br/>

@@ -22,6 +22,7 @@ src/Board_V2_2.d src/Board_V2_2.o: ../src/Board_V2_2.c \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h \
+ c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h \
  ../src/../include/AWS_Board_Operations.h
 
 ../src/../include/Atmega_2560_Definitions_Includes.h:
@@ -69,5 +70,7 @@ c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h:
 c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h:
 
 c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h:
+
+c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h:
 
 ../src/../include/AWS_Board_Operations.h:
