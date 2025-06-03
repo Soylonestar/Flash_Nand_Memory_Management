@@ -123,18 +123,7 @@ void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	}
-	
-	/*		
-	for (int i = 0; i < strlen(write_test1); i++) //each loop, the cache address pointer is incremented (I think...)
-	{
-		SPDR = write_test1[i]; //write uint8_t data type (byte sized) data onto cache register's address
-		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-		//HEX_ID[i] = SPDR; //read Data Register to clear the SPIF flag
 		
-		//USART_TX_Data(write_test[i]);
-	}
-	*/
-	
 	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
 
 	USART_Data("Program Load \n");

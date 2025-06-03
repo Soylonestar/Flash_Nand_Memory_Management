@@ -232,6 +232,13 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		}
 	}
 	
+	//meant for debugging bad pages in block...
+	else if (strcmp(str, "Page Checker") == 0) //Determines if page is good or bad...
+	{
+		s = 0;
+		Page_Tester();
+	}
+	
 	else if (strcmp(str, "Reset") == 0) //Basic Read Test Command
 	{
 		CLEAR_ARR();
@@ -247,7 +254,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		USART_Data("5) Parameter Page \n");
 		USART_Data("6) Flash Status \n");
 		USART_Data("7) Block Checker \n");
-		USART_Data("8) NAND Addresses \n");
-		USART_Data("9) Reset \n");
+		USART_Data("8) Page Checker \n");
+		USART_Data("9) NAND Addresses \n");
+		USART_Data("10) Reset \n");
 	}
 }

@@ -322,3 +322,7 @@ Tackling on creating test methods to determine my range in writeable blocks/page
 
 5/30/25 <br/>
 Working on the test methods, and also opening cans of worms in changing a couple of functions. <br/>
+
+6/3/25 <br/>
+Continuing on working on test methods, and also fixing other code that I think needs fixing. <br/>
+Page Checker is working...<br/>
