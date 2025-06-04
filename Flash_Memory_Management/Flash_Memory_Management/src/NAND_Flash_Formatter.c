@@ -26,7 +26,7 @@ void Page_Tester() //tests each page per block
 		CLEAR_ARR();
 		FLASH_Page_Read();
 		
-		if (Byte_Address[2] == 0x40) //break loop if passed this point
+		if (Byte_Address[2] == 0x40) //break loop if passed this point (x3F) is where all page bits are set to 1
 		{
 			break;
 		}

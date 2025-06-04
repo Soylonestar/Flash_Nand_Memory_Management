@@ -326,3 +326,8 @@ Working on the test methods, and also opening cans of worms in changing a couple
 6/3/25 <br/>
 Continuing on working on test methods, and also fixing other code that I think needs fixing. <br/>
 Page Checker is working...<br/>
+
+6/4/25 <br/>
+Verifying a couple of things for the Page Checker Method, before starting the block checker method. <br/>
+This is the page checker output: <br/>
+<img src = "https://github.com/user-attachments/assets/8d06158a-cd7f-431a-b363-72d96b9547b1" width = "500"/> <br/>
