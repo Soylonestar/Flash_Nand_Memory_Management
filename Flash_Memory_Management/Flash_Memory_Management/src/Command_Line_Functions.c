@@ -33,7 +33,6 @@ void UserInput(bool command) //asking for user input
 		arr_address++;
 		c = USART_RX_Data(); //receive user uint8_t data type input
 	}
-	//CommandBuffer[arr_address] = '\n';
 	CommandBuffer[arr_address] = '\0'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
 	arr_address = 0; //resets array at address 0
 	
@@ -59,9 +58,9 @@ void COLUMN_BLOCK_PAGE_ADDRESSER(bool addr_type) //gets hex number for Column an
 	
 	if (addr_type == false) //false, so address type is Column Address
 	{
-		if (input_counter > 4)
+		if (input_counter != 4) //has to be 4 inputs
 		{
-			USART_Data("One to many. Make sure only 4 inputs. \n");
+			USART_Data("Make sure only 4 inputs. \n");
 			UserInput(false);
 		}
 		
@@ -81,9 +80,9 @@ void COLUMN_BLOCK_PAGE_ADDRESSER(bool addr_type) //gets hex number for Column an
 	}
 	else //true, so address type is Block/Page Address
 	{
-		if (input_counter > 6)
+		if (input_counter != 6) //has to be 6 inputs
 		{
-			USART_Data("One to many. Make sure only 6 inputs. \n");
+			USART_Data("Make sure only 6 inputs. \n");
 			UserInput(false);
 		}
 		

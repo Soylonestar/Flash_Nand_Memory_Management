@@ -30,6 +30,7 @@ void Page_Tester() //tests each page per block
 		{
 			break;
 		}
+		
 		if (data[0] != 0xFF)
 		{
 			Print_To_User(1, COLUMN_ADDRESS, "0x%02X This Page is marked bad \n", Byte_Address, status_feature);

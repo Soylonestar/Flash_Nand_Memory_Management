@@ -331,3 +331,6 @@ Page Checker is working...<br/>
 Verifying a couple of things for the Page Checker Method, before starting the block checker method. <br/>
 This is the page checker output: <br/>
 <img src = "https://github.com/user-attachments/assets/8d06158a-cd7f-431a-b363-72d96b9547b1" width = "500"/> <br/>
+
+6/9/25 <br/>
+Continuing on working on block/page test methods...but I think I'm going to verify, SPI protocol on the oscilloscope...see if this actually works...<br/>
