@@ -125,5 +125,14 @@ void SLAVE_CS_Deselect() //PULL ALL ~CS TO HIGH because SPI bus is shared
 	//~CS, Chip Select (~CS_ADS_03), must be driven low (and settled as output) to set selected slave device to active power mode
 	DDRA |= (1 << PF3); //setting ~CS pin (PF3) as output;
 	PORTA |= (1 << PF3); //setting ~CS pin (PF3) high to de-select the slave device (we are not working on it yet)
-	
+}
+
+void FLASH_NAND_CS_ENABLE() //enable the Chip Select of the FLASH NAND
+{
+	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+}
+
+void FLASH_NAND_CS_DISABLE() //disable the Chip Select of the FLASH NAND
+{
+	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
 }

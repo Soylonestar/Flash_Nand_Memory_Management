@@ -14,7 +14,7 @@
 void UserInput(bool command); //true if command, false if normal input
 void ExecuteCommand(const uint8_t *str); //here is where all the command lines are going to be in...might be its own header file
 
-uint8_t CommandBuffer[254]; //where the CommandLine will be added to by individual uint8_t
+uint8_t CommandBuffer[2048]; //where the CommandLine will be added to by individual uint8_t
 uint8_t c; //for receiving USART_RX_Data
 
 int s; //this is for preset memory allocation (parameter pg for example);

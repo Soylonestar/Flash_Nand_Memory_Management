@@ -25,4 +25,7 @@ void VOLTAGE_Translator_Init (void); //initializes relevant voltage translators
 
 void SLAVE_CS_Deselect(); //Deselects all Chip Selects for SPI protocol
 
+void FLASH_NAND_CS_ENABLE(); //enable the Chip Select of the FLASH NAND
+void FLASH_NAND_CS_DISABLE(); //disable the Chip Select of the FLASH NAND
+
 #endif /* AWS_BOARD_OPERATIONS_H_ */

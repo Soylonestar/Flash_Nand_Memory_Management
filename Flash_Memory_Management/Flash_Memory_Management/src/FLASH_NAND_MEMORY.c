@@ -78,26 +78,26 @@ void SPI_MASTER_Init() //initializes Serial Peripheral Interference (SPI) operat
 
 void FLASH_Write_Enable (void) //select Slave device and initializes Write operations onto Flash NAND
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = WRITE_ENABLED; //Flash NAND's Write Enable command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete; waits for SPIF to be logic high
 	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 	
 	//USART_Data("Write Enable \n");
 }
 
 void FLASH_Write_Disable(void) //de-select Slave device and disable Write operations onto Flash NAND
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = WRITE_DISABLED; //Flash NAND's Write Disable command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 	
 	//USART_Data("Write Disable \n");
 }
@@ -109,7 +109,7 @@ void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 	FLASH_Write_Enable();
 	
 	//code below sends Program_Load command with the starting address of the cache register
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = PROGRAM_LOAD; //Sending Program_Load Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF)));
@@ -126,7 +126,7 @@ void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	}
 		
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 
 	//USART_Data("Page Program Load \n");
 
@@ -137,7 +137,7 @@ void FLASH_Random_Data_Program_x1() //can change parts of the cache buffer, base
 {
 	FLASH_Write_Enable();
 	
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = PROGRAM_LOAD_RANDOM_DATA; //Sending PROGRAM_LOAD_RANDOM_DATA Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF)));
@@ -154,7 +154,7 @@ void FLASH_Random_Data_Program_x1() //can change parts of the cache buffer, base
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	}
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 
 	//USART_Data("Random Program Load \n");
 
@@ -163,18 +163,18 @@ void FLASH_Random_Data_Program_x1() //can change parts of the cache buffer, base
 
 void FLASH_Program_Execute() //new command to transfer data from cache to main array
 {	
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	//code below sends Program_Execute command with the starting address of the main array
 	SPDR = PROGRAM_EXECUTE; //Sending Program Execute Command into SPI Data Register (SPDR)
 	while (!(SPSR & (1 << SPIF))); 
 	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	
-	_delay_us(5);
+	//_delay_us(5);
 	
 	FLASH_MainArray_Address(s, Byte_Address); //determines where to write data to in MainArray
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 	
 	//USART_Data("Program Execute \n");
 	
@@ -185,7 +185,7 @@ void FLASH_Program_Execute() //new command to transfer data from cache to main a
 
 void FLASH_Page_Read() //reads a single page data from Block/Page array to transfer to Cache register
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = PAGE_READ; //Sending Page_Read Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
@@ -195,7 +195,7 @@ void FLASH_Page_Read() //reads a single page data from Block/Page array to trans
 	
 	FLASH_MainArray_Address(s, Byte_Address); //determines where to read data from in MainArray
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 	
 	FLASH_Status(); //checks for the status of data transfer from main array to cache from page_read command
 	
@@ -206,7 +206,7 @@ void FLASH_Page_Read() //reads a single page data from Block/Page array to trans
 
 void FLASH_Read_From_Cache_x1() //read data out of the cache register
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = READ_FROM_CACHE; //Sending Read_From_Cache Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
@@ -222,16 +222,16 @@ void FLASH_Read_From_Cache_x1() //read data out of the cache register
 	
 	FLASH_Data_Storage(s); //determines how to store data in an array
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 	
-	USART_Data("Read from Cache: \n");
+	//USART_Data("Read from Cache: \n");
 }
 
 void FLASH_Block_Erase() //erases data from Flash Nand Memory at the block level
 {
 	FLASH_Write_Enable();
 	
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = BLOCK_ERASE; //Sending Block_Erase Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
@@ -239,7 +239,7 @@ void FLASH_Block_Erase() //erases data from Flash Nand Memory at the block level
 	
 	FLASH_MainArray_Address(s, Byte_Address); //determines where to write/read data to in MainArray
 
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 	
 	USART_Data("Block Erase \n");
 	
@@ -250,7 +250,7 @@ void FLASH_Block_Erase() //erases data from Flash Nand Memory at the block level
 
 void FLASH_ID() //read device ID
 {	
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = READ_ID; //Sending READ_ID Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
@@ -268,27 +268,105 @@ void FLASH_ID() //read device ID
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	HEX_ID [1] = SPDR; //clears the SPIF flag; returns 2Gb 3.3V Device ID
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 
 	sprintf(status_feature, "Read Device ID: Micron ID (0x%02X) Device ID (0x%02X) \n", HEX_ID[0], HEX_ID[1]); //hex data to string
 	USART_Data(status_feature);
 }
 
+void FLASH_Block_Lock_Setter(bool lock) //this method unlocks(false) or locks(true) the device
+{
+	FLASH_NAND_CS_ENABLE();
+	
+	if (lock) //if true, then lock the device
+	{
+		SPDR = SET_FEATURES; //Sending Set_Features Command into SPI Data Register (SPDR)
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	
+		SPDR = BLOCK_LOCK; //send Block Lock address
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	
+		SPDR = 0x7C; //locked and set to its default value
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		data[0] = SPDR; //clears the SPIF flag; returns Block Lock register data	
+	}
+	else //false, so device will be fully unlocked
+	{
+		SPDR = SET_FEATURES; //Sending Set_Features Command into SPI Data Register (SPDR)
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+		
+		SPDR = BLOCK_LOCK; //send Block Lock address
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+		
+		SPDR = 0x00; //THIS WILL FINALLY UNLOCK ALL BLOCKS IN THE DEVICE!!!!!
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		data[0] = SPDR; //clears the SPIF flag; returns Block Lock register data
+	}
+	
+	FLASH_NAND_CS_DISABLE();
+	
+	sprintf(status_feature, "Block Lock Register: 0x%02X \n", data[0]); //hex data to string
+	USART_Data(status_feature);
+}
+
+void FLASH_Block_Lock(bool feature) //reads(false) / writes(true) block lock feature
+{
+	FLASH_NAND_CS_ENABLE();
+	
+	if (feature) //if true the write to register
+	{
+		SPDR = SET_FEATURES; //Sending Set_Features Command into SPI Data Register (SPDR)
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+		
+		SPDR = BLOCK_LOCK; //send Block Lock address
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+		
+		SPDR = 0x00; //TO BE DETERMINED WHAT DATA OR CONFIGURATION ILL WRITE LATER ON....
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		data[0] = SPDR; //clears the SPIF flag; returns Block Lock register data
+	}
+	else //if false the just read the register
+	{
+		SPDR = GET_FEATURES; //Sending Get_Features Command into SPI Data Register (SPDR)
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+		
+		SPDR = BLOCK_LOCK; //send Block Lock address
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+		
+		SPDR = 0x00; //send dummy byte
+		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+		data[0] = SPDR; //clears the SPIF flag; returns Block Lock register data
+	}
+
+	FLASH_NAND_CS_DISABLE();
+
+	sprintf(status_feature, "Block Lock Register: 0x%02X \n", data[0]); //hex data to string
+	USART_Data(status_feature);
+}
+
 void FLASH_Reset() //reset memory device
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = RESET; //Sending READ_ID Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 
 	USART_Data("Device Reseted \n");
 }
 
 void FLASH_Para_Pg() //reads from the FLASH NAND parameter page
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = SET_FEATURES; //Sending Set_Features Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
@@ -299,12 +377,12 @@ void FLASH_Para_Pg() //reads from the FLASH NAND parameter page
 	SPDR = PARAMETER_PAGE_INIT; //Sending data byte, setting CFG1 = 1 (access Parameter page), into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 	
 	//THIS is a PAGE READ FUNCTION....
 	FLASH_Page_Read(); //change plane bit and low byte from 24-bit address
 
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = SET_FEATURES; //Sending Set_Features Command into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
@@ -315,7 +393,7 @@ void FLASH_Para_Pg() //reads from the FLASH NAND parameter page
 	SPDR = PARAMETER_PAGE_EXIT; //Sending data byte to exit Parameter page into SPI Data Register (SPDR)
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 }
 
 void FLASH_MainArray_Address(int s, const uint8_t *array) //24-bit address 4,2Gbs (7 dummy bits, [16:6] Blocks / [5:0] Pages)
@@ -353,8 +431,7 @@ void FLASH_MainArray_Address(int s, const uint8_t *array) //24-bit address 4,2Gb
 
 /*Wasn't complete correct, this is column address to show where to put the data to in memory...*/
 void FLASH_Column_Address(int s, const uint8_t *array) //16-bit address (actual address size is 12-bits)
-{
-	/*Will change to switch-case if necessary*/
+{	
 	if (s == 0) //normal memory operations (sets plane bit to 1 for that address; odd plane)
 	{
 		SPDR = array[0]; //the high-byte of the 16-bit address; 0x10 sets the plane select bit to 1
@@ -389,9 +466,13 @@ void FLASH_Data_Storage(int s) //determines how to store FLASH NAND data in an a
 			while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 			data[i] = SPDR; //read Data Register and adds it to data array
 		
-			if (SPDR == '\r') //|| SPDR == 'ÿ') //ÿ is 0xFF in uint8_t data type; adding carriage return '\r' until I can get NULL to work... 
+			if ((SPDR == '\r') )//|| (SPDR == 0xFF)) //ÿ is 0xFF in uint8_t data type; adding carriage return '\r' until I can get NULL to work... 
 			{
-				USART_Data("Data Received \n");
+				sprintf(status_feature, "Data Received: index %i \n", i);
+				USART_Data(status_feature);
+				
+				//USART_Data("Data Received \n");
+				
 				break;
 			}
 		}
@@ -411,7 +492,7 @@ void FLASH_Data_Storage(int s) //determines how to store FLASH NAND data in an a
 
 void FLASH_Status() //this makes sure that data finishes transferring
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	FLASH_NAND_CS_ENABLE();
 	
 	SPDR = GET_FEATURES; //sending Get Features command into the SPI Data Register (SPDR)
 	while (!(SPSR & (1 << SPIF)));
@@ -427,12 +508,14 @@ void FLASH_Status() //this makes sure that data finishes transferring
 		SPDR = 0x00; //sending dummy byte to continue to get status
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		HEX_ID [0] = SPDR; //read incoming status data and puts it into an array
+		
 		sprintf(status_feature, "Get Features: Status (0x%02X)\n", HEX_ID[0]); //hex data to string
 		USART_Data(status_feature);
+		
 		_delay_us(5);
 	} while (HEX_ID[0] & 0x01);
 	
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	FLASH_NAND_CS_DISABLE();
 
 	//sprintf(status_feature, "Get Features: Status (0x%02X)\n", HEX_ID[0]); //hex data to string
 	//USART_Data(status_feature);

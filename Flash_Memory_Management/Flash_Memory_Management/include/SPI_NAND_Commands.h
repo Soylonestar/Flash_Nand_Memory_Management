@@ -21,10 +21,14 @@
 #define PAGE_READ 0x13 //page read command's address; transfers data from block/page array to cache registers
 #define READ_FROM_CACHE 0x0B //read from cache command's address; read data out of cache
 
-#define GET_FEATURES 0x0F //get features command's address; can lead to the monitoring of the device status
+#define GET_FEATURES 0x0F //get features command's address; only reads the designated register address given by user
 #define SET_FEATURES 0x1F //set features command's address; can alter the device configuration
+
 #define STATUS_REGISTER_ADDRESS 0xC0 //this is the address of the status register
 #define CONFIGURATION_REGISTER_ADDRESS 0xB0 //this is the address of the Configuration register
+#define DIE_SELECT 0xD0 //only available in 4Gb or greater stacked die devices
+#define BLOCK_LOCK 0xA0 //feature that protects entire or ranges of device blocks from PROGRAM and ERASE operations
+
 #define PARAMETER_PAGE_INIT 0x40 //setting CFG1 = 1 to access the Parameter pg in the Flash NAND
 #define PARAMETER_PAGE_EXIT 0x00 //data value that allows exiting parameter page reading
 

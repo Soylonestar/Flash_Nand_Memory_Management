@@ -22,6 +22,7 @@ void UserInput(bool command) //asking for user input
 	input_counter = 0; //reset input counter
 	
 	c = USART_RX_Data(); //receive user uint8_t data type input
+	
 	while ((c != '\r')) //(c != '\n') &&
 	{
 		input_counter++; //increment input counter
@@ -33,6 +34,7 @@ void UserInput(bool command) //asking for user input
 		arr_address++;
 		c = USART_RX_Data(); //receive user uint8_t data type input
 	}
+	
 	CommandBuffer[arr_address] = '\0'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
 	arr_address = 0; //resets array at address 0
 	
@@ -214,6 +216,35 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		FLASH_Status();
 	}
 	
+	else if (strcmp(str, "Flash Block Lock") == 0) //read Block Lock register
+	{
+		CLEAR_ARR();
+		
+		USART_Data("1) Lock \n");
+		USART_Data("2) Unlock \n");
+		USART_Data("3) Read \n");
+		USART_Data("4) Configure \n");
+		
+		UserInput(false); //User Input is added into an array, which will be written to memory
+		
+		if (strcmp(CommandBuffer, "Lock") == 0) //Locks Flash Device
+		{
+			FLASH_Block_Lock_Setter(true);
+		}
+		else if (strcmp(CommandBuffer, "Unlock") == 0) //Unlocks Flash Device
+		{
+			FLASH_Block_Lock_Setter(false);
+		}
+		else if (strcmp(CommandBuffer, "Read") == 0) //Read Block Lock Register
+		{
+			FLASH_Block_Lock(false);
+		}
+		else if (strcmp(CommandBuffer, "Configure") == 0) //Configure Block Lock Register
+		{
+			FLASH_Block_Lock(true);
+		}
+	}
+	
 	//this might stick as part of the main options, but its mostly meant for debugging bad blocks...
 	else if (strcmp(str, "Block Checker") == 0) //Determines if block is good or bad...
 	{
@@ -252,9 +283,10 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		USART_Data("4) Read Memory \n");
 		USART_Data("5) Parameter Page \n");
 		USART_Data("6) Flash Status \n");
-		USART_Data("7) Block Checker \n");
-		USART_Data("8) Page Checker \n");
-		USART_Data("9) NAND Addresses \n");
-		USART_Data("10) Reset \n");
+		USART_Data("7) Flash Block Lock \n");
+		USART_Data("8) Block Checker \n");
+		USART_Data("9) Page Checker \n");
+		USART_Data("10) NAND Addresses \n");
+		USART_Data("11) Reset \n");
 	}
 }

@@ -334,3 +334,16 @@ This is the page checker output: <br/>
 
 6/9/25 <br/>
 Continuing on working on block/page test methods...but I think I'm going to verify, SPI protocol on the oscilloscope...see if this actually works...<br/>
+
+6/10/25 <br/>
+Continuing on yesterdays tasks...<br/>
+Updated my code while working on getting the Block Lock Feature of the device to get data and determine if the device is blocked or not...interesting. Although I thought I did check it, but appears I didn't, so I made a complete functional method for it...<br/>
+Here is what it looks like: <br/>
+<img src = "https://github.com/user-attachments/assets/43170101-47c9-4e35-8ca6-5e301b7cf953" width = "400"/> <br/>
+Here is the definition behind registers' data: <br/>
+<img src = "https://github.com/user-attachments/assets/28727487-d6ef-4aa7-90dd-a80d4e16295f" width = "400"/> <br/>
+AND HERE IS WHERE SOMETHING IMPORTANT IS KNOWN: by default, the device is completely locked...have to unlock it on power up. <br/>
+Here is where the break through is....should've read closer...updating the code so now it should work: <br/>
+<img src = "https://github.com/user-attachments/assets/3c5590f2-8606-475e-a61b-aa9dda644e37" width = "450"/> <br/>
+Good news is that I'm not getting any errors in my status register when reading or writing, but the bad news, I'm not sure if I'm reading correctly or not. <br/>
+Shows me all 0xFF <br/>
