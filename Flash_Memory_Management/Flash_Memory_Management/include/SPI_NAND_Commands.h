@@ -26,8 +26,8 @@
 
 #define STATUS_REGISTER_ADDRESS 0xC0 //this is the address of the status register
 #define CONFIGURATION_REGISTER_ADDRESS 0xB0 //this is the address of the Configuration register
-#define DIE_SELECT 0xD0 //only available in 4Gb or greater stacked die devices
-#define BLOCK_LOCK 0xA0 //feature that protects entire or ranges of device blocks from PROGRAM and ERASE operations
+#define DIE_SELECT_REGISTER_ADDRESS 0xD0 //only available in 4Gb or greater stacked die devices
+#define BLOCK_LOCK_REGISTER_ADDRESS 0xA0 //feature that protects entire or ranges of device blocks from PROGRAM and ERASE operations
 
 #define PARAMETER_PAGE_INIT 0x40 //setting CFG1 = 1 to access the Parameter pg in the Flash NAND
 #define PARAMETER_PAGE_EXIT 0x00 //data value that allows exiting parameter page reading

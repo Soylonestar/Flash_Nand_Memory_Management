@@ -55,6 +55,8 @@ void FLASH_Para_Pg(); //reads from the FLASH NAND parameter page
 
 void CLEAR_ARR();//clears Arrays
 void FLASH_Status(); //checks status till the data completes transferring
+void FLASH_Die_Selection(); //determines which die is being used (default on power on/reset is die 0)
+void FLASH_Configuration(); //at the moment, only obtains data from the Configuration register
 void FLASH_Block_Lock_Setter(bool lock); //locks(true) / unlocks(false) device
 void FLASH_Block_Lock(bool feature); // reads(false) / writes(true) block lock feature
 

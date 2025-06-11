@@ -347,3 +347,7 @@ Here is where the break through is....should've read closer...updating the code 
 <img src = "https://github.com/user-attachments/assets/3c5590f2-8606-475e-a61b-aa9dda644e37" width = "450"/> <br/>
 Good news is that I'm not getting any errors in my status register when reading or writing, but the bad news, I'm not sure if I'm reading correctly or not. <br/>
 Shows me all 0xFF <br/>
+
+6/11/25 <br/>
+Continuing on debugging the Flash...<br/>
+At the moment, can't seem to find out why I can't read my data correctly...so I almost finished implementing all the feature settings the device has. Plus I also organized a little bit better my UI options about the methods.

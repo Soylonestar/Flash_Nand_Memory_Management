@@ -154,44 +154,9 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		FLASH_ID(); //reads Device ID
 	}
 	
-	else if (strcmp(str, "Erase Memory") == 0) //Erase Flash Memory Command
-	{
-		s = 0; //sets main array address to normal operation
-		CLEAR_ARR();
-		FLASH_Block_Erase(); //Erases Flash Block
-	}
-	
 	else if (strcmp(str, "NAND Addresses") == 0) //Tells user what is Column and Block/Page Addresses
 	{
 		NAND_Address_Checker();
-	}
-	
-	else if (strcmp(str, "Write Test") == 0) //Basic Flash Test Command
-	{
-		s = 0;
-		CLEAR_ARR();
-		
-		UserInput(false); //User Input is added into an array, which will be written to memory
-		
-		USART_Data("---Column Address--- 2 bytes \n");
-		COLUMN_BLOCK_PAGE_ADDRESSER(false);
-
-		USART_Data("---Block/Page Address--- 3 bytes \n");
-		COLUMN_BLOCK_PAGE_ADDRESSER(true);
-		
-		Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
-		
-		FLASH_Page_Program(); //adds user input into Flash Write Function, to memory...
-	}
-	
-	else if (strcmp(str, "Read Memory") == 0) //Basic Read Test Command
-	{
-		s = 0; //sets main array to normal operations
-		CLEAR_ARR();
-		FLASH_Page_Read();
-
-		USART_Data(data);
-		USART_TX_Data('\n');
 	}
 	
 	else if (strcmp(str, "Parameter Page") == 0) //Basic Read Test Command
@@ -210,63 +175,135 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		}	
 	}
 	
-	else if (strcmp(str, "Flash Status") == 0) //Read Flash NAND status register
+	else if (strcmp(str, "Feature Registers") == 0) //leads user to the Feature registers of the device
 	{
 		CLEAR_ARR();
-		FLASH_Status();
+		
+		USART_Data("1) Block Lock \n");
+		USART_Data("2) Configuration \n");
+		USART_Data("3) Status \n");
+		USART_Data("4) Die Select \n");
+		
+		UserInput(false);
+		
+		if (strcmp(CommandBuffer, "Block Lock") == 0) //goes to Block Lock Register
+		{
+			CLEAR_ARR();
+			
+			USART_Data("1) Lock \n");
+			USART_Data("2) Unlock \n");
+			USART_Data("3) Read \n");
+			USART_Data("4) Configure \n");
+			
+			UserInput(false); //User Input is added into an array, which will be written to memory
+			
+			if (strcmp(CommandBuffer, "Lock") == 0) //Locks Flash Device
+			{
+				FLASH_Block_Lock_Setter(true);
+			}
+			else if (strcmp(CommandBuffer, "Unlock") == 0) //Unlocks Flash Device
+			{
+				FLASH_Block_Lock_Setter(false);
+			}
+			else if (strcmp(CommandBuffer, "Read") == 0) //Read Block Lock Register
+			{
+				FLASH_Block_Lock(false);
+			}
+			else if (strcmp(CommandBuffer, "Configure") == 0) //Configure Block Lock Register
+			{
+				FLASH_Block_Lock(true);
+			}
+		}
+		
+		else if (strcmp(CommandBuffer, "Configuration") == 0) //goes to the Configuration Register
+		{
+			CLEAR_ARR();
+			FLASH_Configuration(); //get Configuration Register Data
+		}
+		
+		else if (strcmp(CommandBuffer, "Status") == 0) //goes to the Status Register
+		{
+			CLEAR_ARR();
+			FLASH_Status(); //reads status register
+		}
+		
+		else if (strcmp(CommandBuffer, "Die Select") == 0) //goes to the Die Register
+		{
+			CLEAR_ARR();
+			FLASH_Die_Selection(); //at the moment only reads to this
+		}
 	}
 	
-	else if (strcmp(str, "Flash Block Lock") == 0) //read Block Lock register
+	else if (strcmp(str, "Test Methods") == 0) //this holds test methods of the device
 	{
 		CLEAR_ARR();
 		
-		USART_Data("1) Lock \n");
-		USART_Data("2) Unlock \n");
-		USART_Data("3) Read \n");
-		USART_Data("4) Configure \n");
+		USART_Data("1) Write Test \n");
+		USART_Data("2) Read Test \n");
+		USART_Data("3) Erase Test \n");
+		USART_Data("4) Block Checker \n");
+		USART_Data("5) Page Checker \n");
 		
-		UserInput(false); //User Input is added into an array, which will be written to memory
+		UserInput(false);
 		
-		if (strcmp(CommandBuffer, "Lock") == 0) //Locks Flash Device
+		if (strcmp(CommandBuffer, "Write Test") == 0) //write to memory test
 		{
-			FLASH_Block_Lock_Setter(true);
-		}
-		else if (strcmp(CommandBuffer, "Unlock") == 0) //Unlocks Flash Device
-		{
-			FLASH_Block_Lock_Setter(false);
-		}
-		else if (strcmp(CommandBuffer, "Read") == 0) //Read Block Lock Register
-		{
-			FLASH_Block_Lock(false);
-		}
-		else if (strcmp(CommandBuffer, "Configure") == 0) //Configure Block Lock Register
-		{
-			FLASH_Block_Lock(true);
-		}
-	}
-	
-	//this might stick as part of the main options, but its mostly meant for debugging bad blocks...
-	else if (strcmp(str, "Block Checker") == 0) //Determines if block is good or bad...
-	{
-		s = 0;
-		CLEAR_ARR();
-		FLASH_Page_Read();
+			s = 0;
+			CLEAR_ARR();
+			
+			UserInput(false); //User Input is added into an array, which will be written to memory
+			
+			USART_Data("---Column Address--- 2 bytes \n");
+			COLUMN_BLOCK_PAGE_ADDRESSER(false);
 
-		if (HEX_ID[0] != 0xFF) 
-		{
-			USART_Data("Block is marked bad\n");
-		} 
-		else 
-		{
-			USART_Data("Block appears clean\n");
+			USART_Data("---Block/Page Address--- 3 bytes \n");
+			COLUMN_BLOCK_PAGE_ADDRESSER(true);
+			
+			Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
+			
+			FLASH_Page_Program(); //adds user input into Flash Write Function, to memory...
 		}
-	}
-	
-	//meant for debugging bad pages in block...
-	else if (strcmp(str, "Page Checker") == 0) //Determines if page is good or bad...
-	{
-		s = 0;
-		Page_Tester();
+		
+		else if (strcmp(CommandBuffer, "Read Test") == 0) //read from memory test
+		{
+			s = 0; //sets main array to normal operations
+			CLEAR_ARR();
+			FLASH_Page_Read();
+
+			USART_Data(data);
+			USART_TX_Data('\n');
+		}
+		
+		else if (strcmp(CommandBuffer, "Erase Test") == 0) //erases by blocks
+		{
+			s = 0; //sets main array address to normal operation
+			CLEAR_ARR();
+			FLASH_Block_Erase(); //Erases Flash Block
+		}
+		
+		//this might stick as part of the main options, but its mostly meant for debugging bad blocks...
+		else if (strcmp(CommandBuffer, "Block Checker") == 0) //verifies availability of the block
+		{
+			s = 0;
+			CLEAR_ARR();
+			FLASH_Page_Read();
+
+			if (HEX_ID[0] != 0xFF)
+			{
+				USART_Data("Block is marked bad\n");
+			}
+			else
+			{
+				USART_Data("Block appears clean\n");
+			}
+		}
+		
+		//meant for debugging bad pages in block...
+		else if (strcmp(str, "Page Checker") == 0) //determines if page is good or bad...
+		{
+			s = 0;
+			Page_Tester();
+		}
 	}
 	
 	else if (strcmp(str, "Reset") == 0) //Basic Read Test Command
@@ -278,15 +315,10 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	else
 	{
 		USART_Data("1) Flash ID \n");
-		USART_Data("2) Erase Memory \n");
-		USART_Data("3) Write Test \n");
-		USART_Data("4) Read Memory \n");
-		USART_Data("5) Parameter Page \n");
-		USART_Data("6) Flash Status \n");
-		USART_Data("7) Flash Block Lock \n");
-		USART_Data("8) Block Checker \n");
-		USART_Data("9) Page Checker \n");
-		USART_Data("10) NAND Addresses \n");
-		USART_Data("11) Reset \n");
+		USART_Data("2) NAND Addresses \n");
+		USART_Data("3) Parameter Page \n");
+		USART_Data("4) Feature Registers \n");
+		USART_Data("5) Test Methods \n");
+		USART_Data("6) Reset \n");
 	}
 }

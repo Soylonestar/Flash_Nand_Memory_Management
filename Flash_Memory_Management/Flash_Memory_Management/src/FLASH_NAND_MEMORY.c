@@ -104,7 +104,7 @@ void FLASH_Write_Disable(void) //de-select Slave device and disable Write operat
 
 void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 {
-	FLASH_Block_Erase(); //apparently I need to do a block erase of the block I'm writing to...
+	//FLASH_Block_Erase(); //apparently I need to do a block erase of the block I'm writing to...
 	
 	FLASH_Write_Enable();
 	
@@ -274,6 +274,48 @@ void FLASH_ID() //read device ID
 	USART_Data(status_feature);
 }
 
+void FLASH_Die_Selection() //determines what die is selected; at the moment I just want to know which die am I write/reading from
+{
+	FLASH_NAND_CS_ENABLE();
+	
+	SPDR = GET_FEATURES; //sending Get Features to read data
+	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+	data[0] = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	
+	SPDR = DIE_SELECT_REGISTER_ADDRESS; //sends Die Selection Register Address
+	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+	data[0] = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	
+	SPDR = 0x00; //sends dummy byte
+	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+	data[0] = SPDR; //makes sure to clear the SPIF flag in the 2560, obtains data from register
+		
+	FLASH_NAND_CS_DISABLE();
+	
+	Print_To_User(1, 0, "Die Selection Register: 0x%02X \n", data, status_feature);
+}
+
+void FLASH_Configuration() //gets the data from Configuration Register (at the moment just read)
+{
+	FLASH_NAND_CS_ENABLE();
+	
+	SPDR = GET_FEATURES; //sending Get Features to read data
+	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+	data[0] = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	
+	SPDR = CONFIGURATION_REGISTER_ADDRESS; //sends Configuration Register Address
+	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+	data[0] = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	
+	SPDR = 0x00; //sends dummy byte
+	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+	data[0] = SPDR; //makes sure to clear the SPIF flag in the 2560, obtains data from register
+	
+	FLASH_NAND_CS_DISABLE();
+	
+	Print_To_User(1, 0, "Configuration Register: 0x%02X \n", data, status_feature);
+}
+
 void FLASH_Block_Lock_Setter(bool lock) //this method unlocks(false) or locks(true) the device
 {
 	FLASH_NAND_CS_ENABLE();
@@ -284,13 +326,13 @@ void FLASH_Block_Lock_Setter(bool lock) //this method unlocks(false) or locks(tr
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	
-		SPDR = BLOCK_LOCK; //send Block Lock address
+		SPDR = BLOCK_LOCK_REGISTER_ADDRESS; //send Block Lock address
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	
 		SPDR = 0x7C; //locked and set to its default value
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-		data[0] = SPDR; //clears the SPIF flag; returns Block Lock register data	
+		data[0] = SPDR; //clears the SPIF flag; returns garbage	
 	}
 	else //false, so device will be fully unlocked
 	{
@@ -298,19 +340,18 @@ void FLASH_Block_Lock_Setter(bool lock) //this method unlocks(false) or locks(tr
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 		
-		SPDR = BLOCK_LOCK; //send Block Lock address
+		SPDR = BLOCK_LOCK_REGISTER_ADDRESS; //send Block Lock address
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 		
 		SPDR = 0x00; //THIS WILL FINALLY UNLOCK ALL BLOCKS IN THE DEVICE!!!!!
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-		data[0] = SPDR; //clears the SPIF flag; returns Block Lock register data
+		data[0] = SPDR; //clears the SPIF flag; returns garbage
 	}
 	
 	FLASH_NAND_CS_DISABLE();
 	
-	sprintf(status_feature, "Block Lock Register: 0x%02X \n", data[0]); //hex data to string
-	USART_Data(status_feature);
+	//Print_To_User(1, 0, "Block Lock Register: 0x%02X \n", data, status_feature);
 }
 
 void FLASH_Block_Lock(bool feature) //reads(false) / writes(true) block lock feature
@@ -323,7 +364,7 @@ void FLASH_Block_Lock(bool feature) //reads(false) / writes(true) block lock fea
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 		
-		SPDR = BLOCK_LOCK; //send Block Lock address
+		SPDR = BLOCK_LOCK_REGISTER_ADDRESS; //send Block Lock address
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 		
@@ -337,7 +378,7 @@ void FLASH_Block_Lock(bool feature) //reads(false) / writes(true) block lock fea
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 		
-		SPDR = BLOCK_LOCK; //send Block Lock address
+		SPDR = BLOCK_LOCK_REGISTER_ADDRESS; //send Block Lock address
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 		
@@ -347,9 +388,8 @@ void FLASH_Block_Lock(bool feature) //reads(false) / writes(true) block lock fea
 	}
 
 	FLASH_NAND_CS_DISABLE();
-
-	sprintf(status_feature, "Block Lock Register: 0x%02X \n", data[0]); //hex data to string
-	USART_Data(status_feature);
+	
+	Print_To_User(1, 0, "Block Lock Register: 0x%02X \n", data, status_feature);
 }
 
 void FLASH_Reset() //reset memory device
@@ -468,8 +508,10 @@ void FLASH_Data_Storage(int s) //determines how to store FLASH NAND data in an a
 		
 			if ((SPDR == '\r') )//|| (SPDR == 0xFF)) //ÿ is 0xFF in uint8_t data type; adding carriage return '\r' until I can get NULL to work... 
 			{
-				sprintf(status_feature, "Data Received: index %i \n", i);
-				USART_Data(status_feature);
+				Print_To_User(1, 0, "Data Received: index %i \n", i, status_feature);
+				
+				//sprintf(status_feature, "Data Received: index %i \n", i);
+				//USART_Data(status_feature);
 				
 				//USART_Data("Data Received \n");
 				
@@ -509,8 +551,10 @@ void FLASH_Status() //this makes sure that data finishes transferring
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		HEX_ID [0] = SPDR; //read incoming status data and puts it into an array
 		
-		sprintf(status_feature, "Get Features: Status (0x%02X)\n", HEX_ID[0]); //hex data to string
-		USART_Data(status_feature);
+		Print_To_User(1, 0, "Get Features: Status (0x%02X)\n", HEX_ID, status_feature);
+		
+		//sprintf(status_feature, "Get Features: Status (0x%02X)\n", HEX_ID[0]); //hex data to string
+		//USART_Data(status_feature);
 		
 		_delay_us(5);
 	} while (HEX_ID[0] & 0x01);
