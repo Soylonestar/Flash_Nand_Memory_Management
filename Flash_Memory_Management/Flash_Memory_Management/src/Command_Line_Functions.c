@@ -35,6 +35,7 @@ void UserInput(bool command) //asking for user input
 		c = USART_RX_Data(); //receive user uint8_t data type input
 	}
 	
+	//CommandBuffer[arr_address + 1] = '\r';
 	CommandBuffer[arr_address] = '\0'; //adding NULL '\0' to mark end of Command String...; adding carriage return '\r' until I can get NULL to work...
 	arr_address = 0; //resets array at address 0
 	
@@ -213,24 +214,32 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			{
 				FLASH_Block_Lock(true);
 			}
+			else 
+			{
+				ExecuteCommand("Feature Registers");
+			}
 		}
 		
 		else if (strcmp(CommandBuffer, "Configuration") == 0) //goes to the Configuration Register
 		{
 			CLEAR_ARR();
 			FLASH_Configuration(); //get Configuration Register Data
+			ExecuteCommand("Feature Registers");
 		}
 		
 		else if (strcmp(CommandBuffer, "Status") == 0) //goes to the Status Register
 		{
 			CLEAR_ARR();
 			FLASH_Status(); //reads status register
+			
+			ExecuteCommand("Feature Registers");
 		}
 		
 		else if (strcmp(CommandBuffer, "Die Select") == 0) //goes to the Die Register
 		{
 			CLEAR_ARR();
 			FLASH_Die_Selection(); //at the moment only reads to this
+			ExecuteCommand("Feature Registers");
 		}
 	}
 	
@@ -262,6 +271,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
 			
 			FLASH_Page_Program(); //adds user input into Flash Write Function, to memory...
+			
+			ExecuteCommand("Test Methods");
 		}
 		
 		else if (strcmp(CommandBuffer, "Read Test") == 0) //read from memory test
@@ -272,6 +283,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 
 			USART_Data(data);
 			USART_TX_Data('\n');
+			
+			ExecuteCommand("Test Methods");
 		}
 		
 		else if (strcmp(CommandBuffer, "Erase Test") == 0) //erases by blocks
@@ -279,6 +292,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			s = 0; //sets main array address to normal operation
 			CLEAR_ARR();
 			FLASH_Block_Erase(); //Erases Flash Block
+			
+			ExecuteCommand("Test Methods");
 		}
 		
 		//this might stick as part of the main options, but its mostly meant for debugging bad blocks...
@@ -296,6 +311,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			{
 				USART_Data("Block appears clean\n");
 			}
+			
+			ExecuteCommand("Test Methods");
 		}
 		
 		//meant for debugging bad pages in block...
@@ -303,6 +320,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		{
 			s = 0;
 			Page_Tester();
+			
+			ExecuteCommand("Test Methods");
 		}
 	}
 	

@@ -17,13 +17,7 @@
 
 uint8_t status; //read Data register to clear SPIF flag (uselessbyte only)
 
-uint8_t write_test[] = "TX Received \n";
-uint8_t write_test1[] = "TX 1 \n";
-uint8_t write_test2[] = "TX 2 \n";
-uint8_t write_test3[] = "TX 3 \n";
-uint8_t write_test4[] = "TX 4 \n";
-uint8_t write_test5[] = "TX 5 \n";
-uint8_t write_test6[] = "TX 6 \n";
+uint8_t write_test[] = "TX Received \n\r";
 
 /*
 Order on how the write/read the Flash NAND Memory chip
@@ -125,12 +119,24 @@ void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	}
+	
+	/*forcibly adding \r into that data, which sucks but will fix later on....*/
+	SPDR = '\r'; //write uint8_t data type (byte sized) data onto cache register's address
+	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
+	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	
+	/*for (int j = 0; j < strlen(write_test); j++)
+	{
+		SPDR = write_test[j];
+		while(!(SPSR & (1 << SPIF)));
+		status = SPDR;
+	}*/
 		
 	FLASH_NAND_CS_DISABLE();
-
+	
 	//USART_Data("Page Program Load \n");
 
-	FLASH_Program_Execute();	
+	FLASH_Program_Execute();
 }
 
 void FLASH_Random_Data_Program_x1() //can change parts of the cache buffer, based on the specified location from user
@@ -179,8 +185,6 @@ void FLASH_Program_Execute() //new command to transfer data from cache to main a
 	//USART_Data("Program Execute \n");
 	
 	FLASH_Status(); //checks for the status of data transfer from cache to main array from program_execute command
-
-	FLASH_Write_Disable();
 }
 
 void FLASH_Page_Read() //reads a single page data from Block/Page array to transfer to Cache register
@@ -191,12 +195,14 @@ void FLASH_Page_Read() //reads a single page data from Block/Page array to trans
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	
-	_delay_us(5);
+	//_delay_us(5);
 	
 	FLASH_MainArray_Address(s, Byte_Address); //determines where to read data from in MainArray
 	
-	FLASH_NAND_CS_DISABLE();
+	_delay_us(0.200);
 	
+	FLASH_NAND_CS_DISABLE();
+
 	FLASH_Status(); //checks for the status of data transfer from main array to cache from page_read command
 	
 	//USART_Data("Page Read \n");
@@ -216,7 +222,7 @@ void FLASH_Read_From_Cache_x1() //read data out of the cache register
 	
 	FLASH_Column_Address(s, Byte_Address); //determines where to read data from the Cache Register
 	
-	SPDR = 0xFF; //a dummy byte sent
+	SPDR = 0x00; //a dummy byte sent
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	
@@ -241,11 +247,9 @@ void FLASH_Block_Erase() //erases data from Flash Nand Memory at the block level
 
 	FLASH_NAND_CS_DISABLE();
 	
-	USART_Data("Block Erase \n");
-	
 	FLASH_Status(); //checks for the status of data deletion on the block level from Block_Erase command
 	
-	FLASH_Write_Disable();
+	//USART_Data("Block Erase \n");
 }
 
 void FLASH_ID() //read device ID
@@ -551,12 +555,12 @@ void FLASH_Status() //this makes sure that data finishes transferring
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		HEX_ID [0] = SPDR; //read incoming status data and puts it into an array
 		
-		Print_To_User(1, 0, "Get Features: Status (0x%02X)\n", HEX_ID, status_feature);
+		Print_To_User(1, 0, "Status (0x%02X)\n", HEX_ID, status_feature);
 		
 		//sprintf(status_feature, "Get Features: Status (0x%02X)\n", HEX_ID[0]); //hex data to string
 		//USART_Data(status_feature);
 		
-		_delay_us(5);
+		//_delay_us(5);
 	} while (HEX_ID[0] & 0x01);
 	
 	FLASH_NAND_CS_DISABLE();

@@ -19,7 +19,7 @@
 #define PROGRAM_LOAD_RANDOM_DATA 0x84 //program load random data's address; updates only the cache buffer's data bytes specified by the command input sequence
 
 #define PAGE_READ 0x13 //page read command's address; transfers data from block/page array to cache registers
-#define READ_FROM_CACHE 0x0B //read from cache command's address; read data out of cache
+#define READ_FROM_CACHE 0x03 //read from cache command's address; read data out of cache
 
 #define GET_FEATURES 0x0F //get features command's address; only reads the designated register address given by user
 #define SET_FEATURES 0x1F //set features command's address; can alter the device configuration

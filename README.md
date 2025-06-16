@@ -351,3 +351,9 @@ Shows me all 0xFF <br/>
 6/11/25 <br/>
 Continuing on debugging the Flash...<br/>
 At the moment, can't seem to find out why I can't read my data correctly...so I almost finished implementing all the feature settings the device has. Plus I also organized a little bit better my UI options about the methods.
+
+6/16/25 <br/>
+Made the UI a little better with the options. Still working on not being able to read the data from the chip. Creates some basic troubleshooting code to check status, WEL bit, etc. <br/>
+Got something, using one of my assigned Write Test "TX Recieved" and got new data in my status register leading to 0x20. Which is ECCS1 "Bit errors greater than 8 bits detected and not corrected". <br/>
+Will look into that...<br/>
+<img src = "https://github.com/user-attachments/assets/467a5121-808a-4258-85a1-9def5e99163f" width = "400"/> <br/>
