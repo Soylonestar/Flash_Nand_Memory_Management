@@ -17,7 +17,7 @@
 
 uint8_t status; //read Data register to clear SPIF flag (uselessbyte only)
 
-uint8_t write_test[] = "TX Received \n\r";
+uint8_t write_test[] = "TX Received \nWind Speed: 14.3KPH \nTemp: -32 C \n Status: Good\n Errors: 0x02\n	0x23\n	Other than that good....\n\r";
 
 /*
 Order on how the write/read the Flash NAND Memory chip
@@ -98,7 +98,7 @@ void FLASH_Write_Disable(void) //de-select Slave device and disable Write operat
 
 void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 {
-	//FLASH_Block_Erase(); //apparently I need to do a block erase of the block I'm writing to...
+	FLASH_Block_Erase(); //apparently I need to do a block erase of the block I'm writing to...
 	
 	FLASH_Write_Enable();
 	
@@ -113,24 +113,27 @@ void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 	
 	FLASH_Column_Address(s, Byte_Address); //determines where to write data to in Cache
 	
+	/*
 	for (int j = 0; j < strlen(CommandBuffer); j++) //each loop, the cache address pointer is incremented after each byte is shifted out...
 	{
 		SPDR = CommandBuffer[j]; //write uint8_t data type (byte sized) data onto cache register's address
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	}
-	
-	/*forcibly adding \r into that data, which sucks but will fix later on....*/
+	*/
+	/*
+	//forcibly adding \r into that data, which sucks but will fix later on....
 	SPDR = '\r'; //write uint8_t data type (byte sized) data onto cache register's address
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
+	*/
 	
-	/*for (int j = 0; j < strlen(write_test); j++)
+	for (int j = 0; j < strlen(write_test); j++)
 	{
 		SPDR = write_test[j];
 		while(!(SPSR & (1 << SPIF)));
 		status = SPDR;
-	}*/
+	}
 		
 	FLASH_NAND_CS_DISABLE();
 	

@@ -357,3 +357,10 @@ Made the UI a little better with the options. Still working on not being able to
 Got something, using one of my assigned Write Test "TX Recieved" and got new data in my status register leading to 0x20. Which is ECCS1 "Bit errors greater than 8 bits detected and not corrected". <br/>
 Will look into that...<br/>
 <img src = "https://github.com/user-attachments/assets/467a5121-808a-4258-85a1-9def5e99163f" width = "400"/> <br/>
+
+6/17/25 <br/>
+Going to continuing working on yesterday's ideas.<br/>
+Ok, when writing with my write test, everything works. Not getting ECC errors either. Which is good. So it's a matter of making sure that my inputs is correctly, and my '\r' actually is in the data....<br/>
+So update: I've determined that the issue is my write to page, from MY input. Because, if it were the read from page, my write test array wouldn't work. But it shows. So I gotta figure out why my '\r' is being detected. It's probably something dumb. <br/>
+On the working note: I also verified that the data written into the device, held after a few power cycles. Which it did. So now, technically speaking, I'm able to write data and read data from the device itself.<br/>
+But once, I fix my input issue, I'll start working on developing necessary formats to hold our data and potential backups of our device. <br/>
