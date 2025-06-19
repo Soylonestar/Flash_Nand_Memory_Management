@@ -6,10 +6,9 @@
  * Description: This is for our V2.2 board function
  */ 
 
-#include "../include/Atmega_2560_Definitions_Includes.h"
-#include "../include/AWS_Board_Operations.h"
+#include "../main.h"
 
-#define UBRR_CALC ((float)(F_CPU / (16 * (float)USART_BAUD)) - 1) //Equation in Pg 203 for calculating (setting Baud Rate) UBRR Value
+#ifdef Board_V2_2
 
 void USART_Init(void) //TXD0(PE1) setting USART0 on V2.2 Boards
 {
@@ -136,3 +135,5 @@ void FLASH_NAND_CS_DISABLE() //disable the Chip Select of the FLASH NAND
 {
 	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
 }
+
+#endif

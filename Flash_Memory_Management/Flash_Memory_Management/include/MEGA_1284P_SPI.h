@@ -28,7 +28,7 @@ char SPI_Read();
 void TRANSMIT_DATA();
 void RECEIVE_DATA();
 
-uint8_t status;
+uint8_t status[0];
 
 char write_test[] = "TX received \n";
 
@@ -45,7 +45,7 @@ void SPI_Write (char Data) //write to Mega 1284P
 {	
 	SPDR = Data; //add Data to SPI Data register
 	while (!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-	status = SPDR; //read Data register to clear SPIF flag
+	status[0] = SPDR; //read Data register to clear SPIF flag
 }
 
 char SPI_Read (void) //receive data from Mega 1284P
@@ -57,7 +57,7 @@ char SPI_Read (void) //receive data from Mega 1284P
 
 void TRANSMIT_DATA ()
 {
-	status = SPDR; //read Data register to clear SPIF flag
+	status[0] = SPDR; //read Data register to clear SPIF flag
 	
 	/*
 		//The working code that allow individual char data type to be transmitted...
@@ -101,7 +101,7 @@ void TRANSMIT_DATA ()
 
 void RECEIVE_DATA ()
 {
-	status = SPDR; //read Data register to clear SPIF flag
+	status[0] = SPDR; //read Data register to clear SPIF flag
 	
 	for (int i = 0 ; i < sizeof(buffer); i++)
 		{

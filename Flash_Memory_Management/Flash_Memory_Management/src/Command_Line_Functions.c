@@ -6,11 +6,9 @@
  * Description: This is where all the command from user go to execute corresponding commands
  */ 
 
-#include "../include/Atmega_2560_Definitions_Includes.h"
-#include "../include/Command_Line_Functions.h"
-#include "../include/FLASH_NAND_MEMORY.h"
-#include "../include/AWS_Board_Operations.h"
-#include "../include/NAND_Flash_Formatter.h"
+#include "../main.h"
+
+#ifdef Command_Line_Functions
 
 int arr_address = 0; //for CommandBuffer array
 int input_counter = 0; //to count the number of input characters 
@@ -138,13 +136,24 @@ bool HEX_Verification() //verifies uint8_t (ASCII) to Hex validity and allocates
 	//Print_To_User(6, 0, "Parsed nibble: 0x%02X\n", CommandBuffer, status_feature); //troubleshooting, verifies if ASCII is converted to hex values
 }
 
-void NAND_Address_Checker() //returns user the Column and Block/Page Addresses
+void NAND_Address_Checker(bool choice) //returns user the Column and Block/Page Addresses
 {
-	USART_Data("---Column Address--- 2 bytes \n");
-	Print_To_User(COLUMN_ADDRESS, 0, "0x%02X \n", Byte_Address, status_feature);
+	if(choice) //true so write new address
+	{	
+		USART_Data("---Column Address--- 2 bytes \n");
+		COLUMN_BLOCK_PAGE_ADDRESSER(false);
 
-	USART_Data("---Block/Page Address--- 3 bytes \n");	
-	Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "0x%02X \n", Byte_Address, status_feature);
+		USART_Data("---Block/Page Address--- 3 bytes \n");
+		COLUMN_BLOCK_PAGE_ADDRESSER(true);
+	}
+	else //false so read current address
+	{
+		USART_Data("---Column Address--- 2 bytes \n");
+		Print_To_User(COLUMN_ADDRESS, 0, "0x%02X \n", Byte_Address, status_feature);
+
+		USART_Data("---Block/Page Address--- 3 bytes \n");
+		Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "0x%02X \n", Byte_Address, status_feature);	
+	}
 }
 
 void ExecuteCommand(const uint8_t *str) //Execute Command Line function
@@ -157,7 +166,23 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	
 	else if (strcmp(str, "NAND Addresses") == 0) //Tells user what is Column and Block/Page Addresses
 	{
-		NAND_Address_Checker();
+		CLEAR_ARR();
+		
+		USART_Data("1) Read \n");
+		USART_Data("2) Write \n");
+		
+		UserInput(false);
+		
+		if (strcmp(CommandBuffer, "Read") == 0)
+		{
+			NAND_Address_Checker(false); //read current NAND addresses
+			ExecuteCommand("NAND Addresses");
+		}
+		else if (strcmp(CommandBuffer, "Write") == 0)
+		{
+			NAND_Address_Checker(true); //write new NAND addresses
+			ExecuteCommand("NAND Addresses");
+		}
 	}
 	
 	else if (strcmp(str, "Parameter Page") == 0) //Basic Read Test Command
@@ -169,7 +194,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		//reading data from Data array
 		//Print_To_User(PARAMETER_PAGE_SIZE, 0, "%i->Data Received: 0x%02X \n", data, status_feature);
 		
-		for (int i = 0; i < PARAMETER_PAGE_SIZE; i++) //address is incremented automatically after each byte is shifted out
+		for (int i = 0; i < sizeof(data); i++)	//PARAMETER_PAGE_SIZE; i++) //address is incremented automatically after each byte is shifted out
 		{
 			sprintf(status_feature, "%i->Data Received: 0x%02X \n", i, data[i]); //hex data to string
 			USART_Data(status_feature);
@@ -201,18 +226,22 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			if (strcmp(CommandBuffer, "Lock") == 0) //Locks Flash Device
 			{
 				FLASH_Block_Lock_Setter(true);
+				ExecuteCommand("Feature Registers");
 			}
 			else if (strcmp(CommandBuffer, "Unlock") == 0) //Unlocks Flash Device
 			{
 				FLASH_Block_Lock_Setter(false);
+				ExecuteCommand("Feature Registers");
 			}
 			else if (strcmp(CommandBuffer, "Read") == 0) //Read Block Lock Register
 			{
 				FLASH_Block_Lock(false);
+				ExecuteCommand("Feature Registers");
 			}
 			else if (strcmp(CommandBuffer, "Configure") == 0) //Configure Block Lock Register
 			{
 				FLASH_Block_Lock(true);
+				ExecuteCommand("Feature Registers");
 			}
 			else 
 			{
@@ -259,16 +288,10 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		{
 			s = 0;
 			CLEAR_ARR();
+				
+			Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is our NAND Address: 0x%02X \n", Byte_Address, status_feature);
 			
-			UserInput(false); //User Input is added into an array, which will be written to memory
-			
-			USART_Data("---Column Address--- 2 bytes \n");
-			COLUMN_BLOCK_PAGE_ADDRESSER(false);
-
-			USART_Data("---Block/Page Address--- 3 bytes \n");
-			COLUMN_BLOCK_PAGE_ADDRESSER(true);
-			
-			Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is what was inputted: 0x%02X \n", Byte_Address, status_feature);
+			UserInput(false);
 			
 			FLASH_Page_Program(); //adds user input into Flash Write Function, to memory...
 			
@@ -303,7 +326,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			CLEAR_ARR();
 			FLASH_Page_Read();
 
-			if (HEX_ID[0] != 0xFF)
+			if (Device_ID[0] != 0xFF)
 			{
 				USART_Data("Block is marked bad\n");
 			}
@@ -341,3 +364,5 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		USART_Data("6) Reset \n");
 	}
 }
+
+#endif

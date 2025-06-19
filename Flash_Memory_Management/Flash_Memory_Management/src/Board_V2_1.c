@@ -4,11 +4,10 @@
  * Created: 8/6/2024 3:30:31 PM
  *  Author: agarciasampedroperez
  */ 
-/*
-#include "../include/Atmega_2560_Definitions_Includes.h"
-#include "../include/AWS_Board_Operations.h"
 
-#define UBRR_CALC ((float)(F_CPU / (16 * (float)USART_BAUD)) - 1) //Equation in Pg 203 for calculating (setting Baud Rate) UBRR Value
+#include "../main.h"
+
+#ifdef Board_V2_1
 
 void USART_Init() //setting USART1 on V2.1 Boards
 {
@@ -73,4 +72,5 @@ void VOLTAGE_Translator_Init()
 	DDRC |= (1 << PC6); //setting pin as output
 	PORTC |= (1 << PC6); //setting pin to logic high
 }
-*/
+
+#endif

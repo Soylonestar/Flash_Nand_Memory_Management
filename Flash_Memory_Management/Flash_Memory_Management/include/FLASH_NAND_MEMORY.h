@@ -28,9 +28,9 @@
 
 /*Here is where Flash NAND parameters ends*/
 
-uint8_t data[DATA_BYTES_PER_PAGE]; //actual data from FLASH_Nand Memory
-uint8_t status_feature[30];
-uint8_t HEX_ID[5];
+uint8_t data[256]; //actual data from FLASH_Nand Memory
+uint8_t status_feature[256];
+uint8_t Device_ID[2];
 uint8_t Byte_Address[FLASH_NAND_ADDRESS_MAX]; //unsigned 8-bits for hex values
 
 /*The following is the functions to talk/read from the FLASH NAND*/

@@ -364,3 +364,6 @@ Ok, when writing with my write test, everything works. Not getting ECC errors ei
 So update: I've determined that the issue is my write to page, from MY input. Because, if it were the read from page, my write test array wouldn't work. But it shows. So I gotta figure out why my '\r' is being detected. It's probably something dumb. <br/>
 On the working note: I also verified that the data written into the device, held after a few power cycles. Which it did. So now, technically speaking, I'm able to write data and read data from the device itself.<br/>
 But once, I fix my input issue, I'll start working on developing necessary formats to hold our data and potential backups of our device. <br/>
+
+6/19/2025 <br/>
+Alright, I made two things, added main.h which has all the included files, defines source files, and avr/c libraries, as well. Saw this, and wanted to implement it. So I did. Another thing, important thing, it works. My input is accepted and reads from device. Any location that isn't bad, of course. <br/>

@@ -1,5 +1,4 @@
-main.d main.o: .././main.c \
- .././include/Atmega_2560_Definitions_Includes.h \
+main.d main.o: .././main.c .././main.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\xc.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\cci.h \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\io.h \
@@ -22,11 +21,13 @@ main.d main.o: .././main.c \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h \
  c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h \
  c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h \
- c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h \
- .././include/SPI_NAND_Commands.h .././include/AWS_Board_Operations.h \
- .././include/FLASH_NAND_MEMORY.h .././include/Command_Line_Functions.h
+ .././include/AWS_Board_Operations.h \
+ .././include/Atmega_2560_Definitions_Includes.h \
+ .././include/Command_Line_Functions.h .././include/FLASH_NAND_MEMORY.h \
+ .././include/FLASH_NAND_MEMORY.h .././include/SPI_NAND_Commands.h \
+ .././include/NAND_Flash_Formatter.h
 
-.././include/Atmega_2560_Definitions_Includes.h:
+.././main.h:
 
 c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\xc.h:
 
@@ -72,12 +73,16 @@ c:\program\ files\microchip\xc8\v2.36\avr\avr\include\avr\interrupt.h:
 
 c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdbool.h:
 
-c:\program\ files\microchip\xc8\v2.36\avr\lib\gcc\avr\5.4.0\include\stdarg.h:
-
-.././include/SPI_NAND_Commands.h:
-
 .././include/AWS_Board_Operations.h:
+
+.././include/Atmega_2560_Definitions_Includes.h:
+
+.././include/Command_Line_Functions.h:
 
 .././include/FLASH_NAND_MEMORY.h:
 
-.././include/Command_Line_Functions.h:
+.././include/FLASH_NAND_MEMORY.h:
+
+.././include/SPI_NAND_Commands.h:
+
+.././include/NAND_Flash_Formatter.h:
