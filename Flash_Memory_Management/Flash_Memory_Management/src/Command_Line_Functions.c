@@ -164,7 +164,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		FLASH_ID(); //reads Device ID
 	}
 	
-	else if (strcmp(str, "NAND Addresses") == 0) //Tells user what is Column and Block/Page Addresses
+	else if (strcmp(str, "NAND Address") == 0) //Tells user what is Column and Block/Page Addresses
 	{
 		CLEAR_ARR();
 		
@@ -281,6 +281,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		USART_Data("3) Erase Test \n");
 		USART_Data("4) Block Checker \n");
 		USART_Data("5) Page Checker \n");
+		USART_Data("6) NAND Address \n");
 		
 		UserInput(false);
 		
@@ -346,6 +347,27 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			
 			ExecuteCommand("Test Methods");
 		}
+		
+		else if (strcmp(str, "NAND Address") == 0) //Tells user what is Column and Block/Page Addresses
+		{
+			CLEAR_ARR();
+			
+			USART_Data("1) Read \n");
+			USART_Data("2) Write \n");
+			
+			UserInput(false);
+			
+			if (strcmp(CommandBuffer, "Read") == 0)
+			{
+				NAND_Address_Checker(false); //read current NAND addresses
+				ExecuteCommand("Test Methods");
+			}
+			else if (strcmp(CommandBuffer, "Write") == 0)
+			{
+				NAND_Address_Checker(true); //write new NAND addresses
+				ExecuteCommand("Test Methods");
+			}
+		}
 	}
 	
 	else if (strcmp(str, "Reset") == 0) //Basic Read Test Command
@@ -357,7 +379,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	else
 	{
 		USART_Data("1) Flash ID \n");
-		USART_Data("2) NAND Addresses \n");
+		USART_Data("2) NAND Address \n");
 		USART_Data("3) Parameter Page \n");
 		USART_Data("4) Feature Registers \n");
 		USART_Data("5) Test Methods \n");

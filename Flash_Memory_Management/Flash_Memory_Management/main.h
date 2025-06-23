@@ -19,7 +19,7 @@
 #include <avr/interrupt.h>
 #include <stdbool.h>
 
-/*Include All Include File*/
+/*Include All Header Files*/
 #include "include/AWS_Board_Operations.h" //Our boards' operations
 #include "include/Atmega_2560_Definitions_Includes.h" //these are board required parameters
 #include "include/Command_Line_Functions.h" //UI operations

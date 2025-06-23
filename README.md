@@ -367,3 +367,6 @@ But once, I fix my input issue, I'll start working on developing necessary forma
 
 6/19/2025 <br/>
 Alright, I made two things, added main.h which has all the included files, defines source files, and avr/c libraries, as well. Saw this, and wanted to implement it. So I did. Another thing, important thing, it works. My input is accepted and reads from device. Any location that isn't bad, of course. <br/>
+
+6/23/2025 <br/>
+I'm trying to start researching on how to format data into the flash nand. Which then can be implemented with the sensors and data to be written to it as well <br/>

@@ -42,7 +42,7 @@ void Page_Tester() //tests each page per block
 	}
 }
 
-void Write_Page_Test()
+void Write_Page_Test() //tests on writing a small message in every page of a block...then reads the data back.
 {
 	;
 }
