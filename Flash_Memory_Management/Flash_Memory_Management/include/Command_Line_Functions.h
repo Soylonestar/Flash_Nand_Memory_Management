@@ -20,6 +20,7 @@ uint8_t CommandBuffer[256]; //where the CommandLine will be added to by individu
 uint8_t c; //for receiving USART_RX_Data
 
 int s; //this is for preset memory allocation (parameter pg for example);
+int d; //this is for Flash device selection
 
 void COLUMN_BLOCK_PAGE_ADDRESSER(bool addr_type); //this function puts hex values for false (Column Addr.) or true (Block/Page Addr.)
 bool HEX_Verification(); //this is for conversion to hex values from ASCII (uint8_t) user input; returns bool

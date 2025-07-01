@@ -161,7 +161,11 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	if (strcmp(str, "Flash ID") == 0) //Flash ID Command
 	{
 		CLEAR_ARR();
-		FLASH_ID(); //reads Device ID
+		d = 1;
+		FLASH_ID(); //reads Device ID #1
+		d = 2;
+		FLASH_ID(); //reads Device ID #2
+		d = 1;
 	}
 	
 	else if (strcmp(str, "NAND Address") == 0) //Tells user what is Column and Block/Page Addresses
@@ -187,8 +191,8 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 	
 	else if (strcmp(str, "Parameter Page") == 0) //Basic Read Test Command
 	{
-		s = 1; //sets main array address to the correct place
 		CLEAR_ARR();
+		s = 1; //sets main array address to the correct place
 		FLASH_Para_Pg();
 		
 		//reading data from Data array

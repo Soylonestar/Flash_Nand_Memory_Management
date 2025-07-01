@@ -372,4 +372,13 @@ Alright, I made two things, added main.h which has all the included files, defin
 I'm trying to start researching on how to format data into the flash nand. Which then can be implemented with the sensors and data to be written to it as well <br/>
 
 7/1/2025 <br/>
-Alright, I did a couple of tests. This device 100% works. I can read and write in different pages and blocks. Turned the board off, and the data is retained. So everything works. Finallyyyyyyy!!!
+Alright, I did a couple of tests. This device 100% works. I can read and write in different pages and blocks. Turned the board off, and the data is retained. So everything works. Finallyyyyyyy!!! <br/>
+
+On the V2.2 Board, I added another Flash NAND Device, I needed to make sure that I can alternate devices (pretty much making sure our hardware works).<br/>
+V2.2 Board Before: <br/>
+<img src = "https://github.com/user-attachments/assets/dfca4dcb-d910-4bce-a99a-2513c39c4950" width = "400"/> <br/>
+V2.2 Board After: <br/>
+<img src = "https://github.com/user-attachments/assets/5c1161da-da46-4ce2-b6b6-441824b1a24d" width = "400"/> <br/>
+
+To prove that it works, here's the Flash IDs of both devices: <br/>
+<img src = "https://github.com/user-attachments/assets/1262233b-4d68-45cf-bd16-60d616a2e6aa" width = "400"/> <br/>

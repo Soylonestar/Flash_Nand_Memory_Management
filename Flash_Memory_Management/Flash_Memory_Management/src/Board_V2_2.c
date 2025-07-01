@@ -126,14 +126,54 @@ void SLAVE_CS_Deselect() //PULL ALL ~CS TO HIGH because SPI bus is shared
 	PORTA |= (1 << PF3); //setting ~CS pin (PF3) high to de-select the slave device (we are not working on it yet)
 }
 
-void FLASH_NAND_CS_ENABLE() //enable the Chip Select of the FLASH NAND
+void FLASH_NAND_CS_ENABLE(int device_num) //enable the Chip Select of the corresponding Flash NAND
 {
-	PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+	switch (device_num)
+	{
+		case 1:	//Flash NAND 2GB Device #1
+			PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
+			break;
+		
+		case 2://Flash NAND 4GB Device #2
+			PORTA &= ~(1 << PA4); //~CS pin set low for selecting slave device
+			break;
+		
+		case 3: //Flash NAND #GB Device #3
+			PORTA &= ~(1 << PA5); //~CS pin set low for selecting slave device
+			break;
+			
+		case 4:	//Flash NAND #GB Device #4
+			PORTA &= ~(1 << PA6); //~CS pin set low for selecting slave device
+			break;
+			
+		default:
+			break;
+	}
 }
 
-void FLASH_NAND_CS_DISABLE() //disable the Chip Select of the FLASH NAND
+void FLASH_NAND_CS_DISABLE(int device_num) //disable the Chip Select of the FLASH NAND
 {
-	PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+	switch (device_num)
+	{
+		case 1:	//Flash NAND 2GB Device #1
+			PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
+			break;
+		
+		case 2://Flash NAND 4GB Device #2
+			PORTA |= (1 << PA4); //~CS pin set high for de-selecting slave device; to end the command sequence
+			break;
+		
+		case 3: //Flash NAND #GB Device #3
+			PORTA |= (1 << PA5); //~CS pin set high for de-selecting slave device; to end the command sequence
+			break;
+		
+		case 4:	//Flash NAND #GB Device #4
+			PORTA |= (1 << PA6); //~CS pin set high for de-selecting slave device; to end the command sequence
+			break;
+		
+		default:
+			break;
+	}
 }
 
 #endif

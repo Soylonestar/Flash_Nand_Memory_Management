@@ -23,9 +23,9 @@ void LED_Green_Toggle(); //toggle Green Led on Board
 
 void VOLTAGE_Translator_Init (void); //initializes relevant voltage translators
 
-void SLAVE_CS_Deselect(); //Deselects all Chip Selects for SPI protocol
+void SLAVE_CS_Deselect(); //De-selects all Chip Selects for SPI protocol
 
-void FLASH_NAND_CS_ENABLE(); //enable the Chip Select of the FLASH NAND
-void FLASH_NAND_CS_DISABLE(); //disable the Chip Select of the FLASH NAND
+void FLASH_NAND_CS_ENABLE(int device_num); //enable the Chip Select of the corresponding FLASH NAND
+void FLASH_NAND_CS_DISABLE(int device_num); //disable the Chip Select of the corresponding FLASH NAND
 
 #endif /* AWS_BOARD_OPERATIONS_H_ */
