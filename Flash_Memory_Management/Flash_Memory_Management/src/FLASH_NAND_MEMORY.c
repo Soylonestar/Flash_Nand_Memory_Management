@@ -95,7 +95,7 @@ void FLASH_Write_Disable(void) //de-select Slave device and disable Write operat
 
 void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 {
-	FLASH_Block_Erase(); //apparently I need to do a block erase of the block I'm writing to...
+	//FLASH_Block_Erase(); //apparently I need to do a block erase of the block I'm writing to...
 	
 	FLASH_Write_Enable();
 	
@@ -110,7 +110,6 @@ void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 	
 	FLASH_Column_Address(s, Byte_Address); //determines where to write data to in Cache
 	
-	
 	for (int j = 0; j < strlen(CommandBuffer); j++) //each loop, the cache address pointer is incremented after each byte is shifted out...
 	{
 		SPDR = CommandBuffer[j]; //write uint8_t data type (byte sized) data onto cache register's address
@@ -118,12 +117,10 @@ void FLASH_Page_Program() //Write into addressed pages in Flash NAND
 		status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
 	}
 	
-	
 	//forcibly adding \r into that data, which sucks but will fix later on....
 	SPDR = '\r'; //write uint8_t data type (byte sized) data onto cache register's address
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 	status = SPDR; //makes sure to clear the SPIF flag in the 2560, useless byte
-	
 	
 	/*for (int j = 0; j < strlen(write_test); j++)
 	{

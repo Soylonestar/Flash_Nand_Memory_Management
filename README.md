@@ -370,3 +370,6 @@ Alright, I made two things, added main.h which has all the included files, defin
 
 6/23/2025 <br/>
 I'm trying to start researching on how to format data into the flash nand. Which then can be implemented with the sensors and data to be written to it as well <br/>
+
+7/1/2025 <br/>
+Alright, I did a couple of tests. This device 100% works. I can read and write in different pages and blocks. Turned the board off, and the data is retained. So everything works. Finallyyyyyyy!!!
