@@ -72,7 +72,7 @@ void COLUMN_BLOCK_PAGE_ADDRESSER(bool addr_type) //gets hex number for Column an
 				Byte_Address[i / 2] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
 			}
 			
-			Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, status_feature);	
+			Print_To_User(COLUMN_ADDRESS, 0, "Column Address -> 0x%02X \n", Byte_Address, ARR_DAT.random_data);	
 		}
 		else
 		{
@@ -94,7 +94,7 @@ void COLUMN_BLOCK_PAGE_ADDRESSER(bool addr_type) //gets hex number for Column an
 				Byte_Address[COLUMN_ADDRESS + (i / 2)] = (CommandBuffer[i] << 4) | CommandBuffer[i + 1];
 			}
 			
-			Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "Block/Page Address -> 0x%02X \n", Byte_Address, status_feature);
+			Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "Block/Page Address -> 0x%02X \n", Byte_Address, ARR_DAT.random_data);
 		}
 		else
 		{
@@ -127,7 +127,7 @@ bool HEX_Verification() //verifies uint8_t (ASCII) to Hex validity and allocates
 		else
 		{
 			USART_Data("Wrong Input \nMake sure input is HEX valid [0 - F] \n");
-			Print_To_User(1, 0, "Here is what was inputted: 0x%02X \n", CommandBuffer, status_feature);
+			Print_To_User(1, 0, "Here is what was inputted: 0x%02X \n", CommandBuffer, ARR_DAT.random_data);
 			CLEAR_ARR();
 			return false; //return false, indicating failed test
 		}
@@ -149,10 +149,10 @@ void NAND_Address_Checker(bool choice) //returns user the Column and Block/Page 
 	else //false so read current address
 	{
 		USART_Data("---Column Address--- 2 bytes \n");
-		Print_To_User(COLUMN_ADDRESS, 0, "0x%02X \n", Byte_Address, status_feature);
+		Print_To_User(COLUMN_ADDRESS, 0, "0x%02X \n", Byte_Address, ARR_DAT.random_data);
 
 		USART_Data("---Block/Page Address--- 3 bytes \n");
-		Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "0x%02X \n", Byte_Address, status_feature);	
+		Print_To_User(BLOCK_PAGE_ADDRESS, COLUMN_ADDRESS, "0x%02X \n", Byte_Address, ARR_DAT.random_data);	
 	}
 }
 
@@ -198,10 +198,12 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 		//reading data from Data array
 		//Print_To_User(PARAMETER_PAGE_SIZE, 0, "%i->Data Received: 0x%02X \n", data, status_feature);
 		
-		for (int i = 0; i < sizeof(data); i++)	//PARAMETER_PAGE_SIZE; i++) //address is incremented automatically after each byte is shifted out
+		for (int i = 0; i < sizeof(ARR_DAT.data); i++)	//PARAMETER_PAGE_SIZE; i++) //address is incremented automatically after each byte is shifted out
 		{
-			sprintf(status_feature, "%i->Data Received: 0x%02X \n", i, data[i]); //hex data to string
-			USART_Data(status_feature);
+			//sprintf(ARR_DAT.random_data, "%i->Data Received: 0x%02X \n", i, ARR_DAT.data[i]); //hex data to string
+			//USART_Data(ARR_DAT.random_data);
+			sprintf(CommandBuffer, "%i->Data Received: 0x%02X \n", i, ARR_DAT.data[i]); //hex data to string
+			USART_Data(CommandBuffer);
 		}	
 	}
 	
@@ -294,7 +296,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			s = 0;
 			CLEAR_ARR();
 				
-			Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is our NAND Address: 0x%02X \n", Byte_Address, status_feature);
+			Print_To_User(FLASH_NAND_ADDRESS_MAX, 0, "Here is our NAND Address: 0x%02X \n", Byte_Address, ARR_DAT.random_data);
 			
 			UserInput(false);
 			
@@ -309,7 +311,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			CLEAR_ARR();
 			FLASH_Page_Read();
 
-			USART_Data(data);
+			USART_Data(ARR_DAT.data);
 			USART_TX_Data('\n');
 			
 			ExecuteCommand("Test Methods");
@@ -331,7 +333,7 @@ void ExecuteCommand(const uint8_t *str) //Execute Command Line function
 			CLEAR_ARR();
 			FLASH_Page_Read();
 
-			if (Device_ID[0] != 0xFF)
+			if (ARR_DAT.Device_ID[0] != 0xFF)
 			{
 				USART_Data("Block is marked bad\n");
 			}

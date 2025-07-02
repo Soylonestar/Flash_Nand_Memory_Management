@@ -23,15 +23,22 @@
 #define SPARE_BYTES_PER_PARTIAL_PAGE 32 //# of spare bytes per partial page
 #define PAGES_PER_BLOCK 64 //# of pages per block
 #define BLOCKS_PER_DIE 2048 //# of blocks per die
-#define DIE_PER_MODULE 1 //# of dies
+#define DIE_PER_MODULE 1 //# of dies (1 for 2GB; 2 for 4GB)
 #define MAXIMUM_BAD_BLOCKS_PER_DIE 40 //# of bad blocks per die
 
 /*Here is where Flash NAND parameters ends*/
 
-uint8_t data[256]; //actual data from FLASH_Nand Memory
-uint8_t status_feature[256];
-uint8_t Device_ID[2];
-uint8_t Byte_Address[FLASH_NAND_ADDRESS_MAX]; //unsigned 8-bits for hex values
+uint8_t Byte_Address[FLASH_NAND_ADDRESS_MAX]; //unsigned 8-bits for hex values (NAND Address)
+
+//this union keeps all the arrays I'll be using in the same memory region
+typedef union
+{
+	uint8_t data[256]; //where data from the FLASH_NAND would go to
+	uint8_t random_data[256]; //random data placed here
+	uint8_t Device_ID[2]; //location to put Device ID data
+} data_arrays;
+
+data_arrays ARR_DAT; //initialize union array called ARR_DAT (Array_Data)
 
 /*The following is the functions to talk/read from the FLASH NAND*/
 

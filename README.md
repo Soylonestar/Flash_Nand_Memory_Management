@@ -382,3 +382,6 @@ V2.2 Board After: <br/>
 
 To prove that it works, here's the Flash IDs of both devices: <br/>
 <img src = "https://github.com/user-attachments/assets/1262233b-4d68-45cf-bd16-60d616a2e6aa" width = "400"/> <br/>
+
+7/2/2025 <br/>
+Just did a little cleaning of my code. Added a couple of structs and unions, to make things a little easier to read and understand. It isn't done by any stretch of the imagination but it's a start. Although I will start pushing this aside for other projects that require my attention at the moment...

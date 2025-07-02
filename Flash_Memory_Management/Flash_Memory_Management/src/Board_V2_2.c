@@ -10,6 +10,12 @@
 
 #ifdef Board_V2_2
 
+/*initialize flash objects*/
+//Flash_Device Flash_1 = {.d = 1, .s = 0}; //Flash NAND #1 (default)
+//Flash_Device Flash_2 = {.d = 2, .s = 0}; //Flash NAND #2 (default)
+//Flash_Device Flash_3 = {.d = 3, .s = 0}; //Flash NAND #3 (default)
+//Flash_Device Flash_4 = {.d = 4, .s = 0}; //Flash NAND #4 (default)
+
 void USART_Init(void) //TXD0(PE1) setting USART0 on V2.2 Boards
 {
 	//Set Internal Clock Generator or Baud Rate
@@ -134,7 +140,7 @@ void FLASH_NAND_CS_ENABLE(int device_num) //enable the Chip Select of the corres
 			PORTA &= ~(1 << PA3); //~CS pin set low for selecting slave device
 			break;
 		
-		case 2://Flash NAND 4GB Device #2
+		case 2:	//Flash NAND 4GB Device #2
 			PORTA &= ~(1 << PA4); //~CS pin set low for selecting slave device
 			break;
 		
@@ -159,7 +165,7 @@ void FLASH_NAND_CS_DISABLE(int device_num) //disable the Chip Select of the FLAS
 			PORTA |= (1 << PA3); //~CS pin set high for de-selecting slave device; to end the command sequence
 			break;
 		
-		case 2://Flash NAND 4GB Device #2
+		case 2:	//Flash NAND 4GB Device #2
 			PORTA |= (1 << PA4); //~CS pin set high for de-selecting slave device; to end the command sequence
 			break;
 		

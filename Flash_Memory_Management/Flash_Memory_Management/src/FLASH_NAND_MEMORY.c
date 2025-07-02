@@ -25,14 +25,14 @@ Order on how the write/read the Flash NAND Memory chip
 
 void CLEAR_ARR(void) //to clear all relevant arrays with null
 {
-	for(int i = 0; i < sizeof(Device_ID); i++)
+	for(int i = 0; i < sizeof(ARR_DAT.Device_ID); i++)
 	{
-		Device_ID[i] = '\0';
+		ARR_DAT.Device_ID[i] = '\0';
 	}
 	
-	for(int i = 0; i < sizeof(data); i++)
+	for(int i = 0; i < sizeof(ARR_DAT.data); i++)
 	{
-		data[i] = '\0';
+		ARR_DAT.data[i] = '\0';
 	}
 	
 	for (int i = 0; i < sizeof(CommandBuffer); i++)
@@ -45,9 +45,9 @@ void CLEAR_ARR(void) //to clear all relevant arrays with null
 		Byte_Address[i] = '\0';
 	}*/
 	
-	for (int i = 0; i < sizeof(status_feature); i++)
+	for (int i = 0; i < sizeof(ARR_DAT.random_data); i++)
 	{
-		status_feature[i] = '\0';
+		ARR_DAT.random_data[i] = '\0';
 	}
 }
 
@@ -263,16 +263,16 @@ void FLASH_ID() //read device ID
 	
 	SPDR = 0x00; //send dummy byte
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-	Device_ID [0] = SPDR; //clears the SPIF flag; returns Micron ID
+	ARR_DAT.Device_ID [0] = SPDR; //clears the SPIF flag; returns Micron ID
 	
 	SPDR = 0x00; //send dummy byte
 	while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-	Device_ID [1] = SPDR; //clears the SPIF flag; returns 2Gb 3.3V Device ID
+	ARR_DAT.Device_ID [1] = SPDR; //clears the SPIF flag; returns 2Gb 3.3V Device ID
 	
 	FLASH_NAND_CS_DISABLE(d);
 
-	sprintf(status_feature, "Read Device ID: Micron ID (0x%02X) Device ID (0x%02X) \n", Device_ID[0], Device_ID[1]); //hex data to string
-	USART_Data(status_feature);
+	sprintf(ARR_DAT.random_data, "Read Device ID: Micron ID (0x%02X) Device ID (0x%02X) \n", ARR_DAT.Device_ID[0], ARR_DAT.Device_ID[1]); //hex data to string
+	USART_Data(ARR_DAT.random_data);
 }
 
 void FLASH_Die_Selection() //determines what die is selected; at the moment I just want to know which die am I write/reading from
@@ -293,7 +293,7 @@ void FLASH_Die_Selection() //determines what die is selected; at the moment I ju
 		
 	FLASH_NAND_CS_DISABLE(d);
 	
-	Print_To_User(1, 0, "Die Selection Register: 0x%02X \n", &status, status_feature);
+	Print_To_User(1, 0, "Die Selection Register: 0x%02X \n", &status, ARR_DAT.random_data);
 }
 
 void FLASH_Configuration() //gets the data from Configuration Register (at the moment just read)
@@ -314,7 +314,7 @@ void FLASH_Configuration() //gets the data from Configuration Register (at the m
 	
 	FLASH_NAND_CS_DISABLE(d);
 	
-	Print_To_User(1, 0, "Configuration Register: 0x%02X \n", &status, status_feature);
+	Print_To_User(1, 0, "Configuration Register: 0x%02X \n", &status, ARR_DAT.random_data);
 }
 
 void FLASH_Block_Lock_Setter(bool lock) //this method unlocks(false) or locks(true) the device
@@ -390,7 +390,7 @@ void FLASH_Block_Lock(bool feature) //reads(false) / writes(true) block lock fea
 
 	FLASH_NAND_CS_DISABLE(d);
 	
-	Print_To_User(1, 0, "Block Lock Register: 0x%02X \n", &status, status_feature);
+	Print_To_User(1, 0, "Block Lock Register: 0x%02X \n", &status, ARR_DAT.random_data);
 }
 
 void FLASH_Reset() //reset memory device
@@ -501,20 +501,20 @@ void FLASH_Data_Storage(int s) //determines how to store FLASH NAND data in an a
 	if (s == 0) //normal method for strings
 	{
 		//reading and writing uint8_t data type into data[]
-		for (int i = 0; i < sizeof(data); i++) //address is incremented automatically after each byte is shifted out
+		for (int i = 0; i < sizeof(ARR_DAT.data); i++) //address is incremented automatically after each byte is shifted out
 		{
 			SPDR = 0x00; //a dummy byte, ignored by the Flash NAND...to get data back
 			while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-			data[i] = SPDR; //read Data Register and adds it to data array
+			ARR_DAT.data[i] = SPDR; //read Data Register and adds it to data array
 		
 			if ((SPDR == '\r') )//|| (SPDR == 0xFF)) //ÿ is 0xFF in uint8_t data type; adding carriage return '\r' until I can get NULL to work... 
 			{
-				Print_To_User(1, 0, "Data Received: index %i \n", i, status_feature);
+				//Print_To_User(1, 0, "Data Received: index %i \n", i, ARR_DAT.random_data);
 				
 				//sprintf(status_feature, "Data Received: index %i \n", i);
 				//USART_Data(status_feature);
 				
-				//USART_Data("Data Received \n");
+				USART_Data("Data Received \n");
 				
 				break;
 			}
@@ -524,11 +524,11 @@ void FLASH_Data_Storage(int s) //determines how to store FLASH NAND data in an a
 	if (s == 1) //parameter page requires this
 	{
 		//reading and writing uint8_t data type into data[]
-		for (int i = 0; i < sizeof(data); i++) //address is incremented automatically after each byte is shifted out
+		for (int i = 0; i < sizeof(ARR_DAT.data); i++) //address is incremented automatically after each byte is shifted out
 		{
 			SPDR = 0x00; //a dummy byte, ignored by the Flash NAND...to get data back
 			while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
-			data[i] = SPDR; //read Data Register and adds it to data array
+			ARR_DAT.data[i] = SPDR; //read Data Register and adds it to data array
 		}
 	}
 }
@@ -552,7 +552,7 @@ void FLASH_Status() //this makes sure that data finishes transferring
 		while(!(SPSR & (1 << SPIF))); //waiting until serial transfer is complete
 		status = SPDR; //read incoming status data and puts it into an array
 		
-		Print_To_User(1, 0, "Status (0x%02X)\n", &status, status_feature);
+		Print_To_User(1, 0, "Status (0x%02X)\n", &status, ARR_DAT.random_data);
 		
 		//sprintf(status_feature, "Get Features: Status (0x%02X)\n", HEX_ID[0]); //hex data to string
 		//USART_Data(status_feature);

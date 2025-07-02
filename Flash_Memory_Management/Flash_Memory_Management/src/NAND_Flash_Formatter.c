@@ -29,13 +29,13 @@ void Page_Tester() //tests each page per block
 			break;
 		}
 		
-		if (data[0] != 0xFF)
+		if (ARR_DAT.data[0] != 0xFF)
 		{
-			Print_To_User(1, 4, "0x%02X This Page is marked bad \n", Byte_Address, status_feature);
+			Print_To_User(1, 4, "0x%02X This Page is marked bad \n", Byte_Address, ARR_DAT.random_data);
 		}
 		else
 		{
-			Print_To_User(1, 4, "0x%02X This Page is clean \n", Byte_Address, status_feature);
+			Print_To_User(1, 4, "0x%02X This Page is clean \n", Byte_Address, ARR_DAT.random_data);
 		}
 		
 		Byte_Address[4]++; //increment page hopefully...

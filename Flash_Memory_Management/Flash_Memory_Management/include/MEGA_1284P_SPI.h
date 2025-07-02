@@ -34,7 +34,8 @@ char write_test[] = "TX received \n";
 
 //char char_data = '!';
 char buffer[20];
-char data;
+
+//char data; make sure to delete comment before use...
 
 /*
 DOESN'T LIKE BIT BANGING

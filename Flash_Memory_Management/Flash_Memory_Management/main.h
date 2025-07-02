@@ -33,6 +33,6 @@
 //#define Board_V2_1 //only one board version at a time
 #define Command_Line_Functions //UI methods
 #define NAND_Flash_Formatter //Flash Tester/Formatter
-#define FLASH_NAND_MEMORY //FLASH_NAND Driver methods
+#define FLASH_NAND_MEMORY //FLASH_NAND Driver
 
 #endif /* MAIN_H_ */

@@ -11,7 +11,7 @@
 
 /*The following is our micro controller parameters*/
 
-#define F_CPU 16000000UL //system clock 16MHz
+//#define F_CPU 16000000UL //system clock 16MHz (commented out because I made a global symbol in the C Compiler)
 #define USART_BAUD 9600 //baud rate of USART
 #define UBRR_CALC ((float)(F_CPU / (16 * (float)USART_BAUD)) - 1) //Equation in Pg 203 for calculating (setting Baud Rate) UBRR Value
 
